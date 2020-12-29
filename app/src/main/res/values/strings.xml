@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">HappyWifeApp</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_new_event">Add new event</string>
+    <string name="edit_text_hint_title">Title</string>
+    <string name="edit_text_hint_date">Date</string>
+    <string name="edit_text_hint_description">Things worth to remember at this day</string>
+    <string name="edit_text_hint_location">Location</string>
+    <string name="new_event_text_use_map">USE MAP</string>
+    <string name="new_event_add_image_text">ADD IMAGE</string>
+    <string name="add_new_event_button_save">SAVE</string>
 </resources>
