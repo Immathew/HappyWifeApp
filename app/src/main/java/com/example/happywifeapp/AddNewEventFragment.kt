@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -12,6 +14,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +29,10 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,6 +46,7 @@ class AddNewEventFragment : Fragment() {
     companion object {
         private const val GALLERY = 1
         private const val CAMERA = 2
+        private const val IMAGE_DIRECTORY = "HappyPlacesImages"
     }
 
     override fun onCreateView(
@@ -113,10 +120,13 @@ class AddNewEventFragment : Fragment() {
                        if (Build.VERSION.SDK_INT < 28) {
                            val selectedImageBitmap = MediaStore.Images.Media.getBitmap(
                                requireActivity().contentResolver, contentURI)
+                           saveImageToInternalStorage(selectedImageBitmap)
                            _binding.imageViewPlaceImage.setImageBitmap(selectedImageBitmap)
+
                        } else {
                            val source = ImageDecoder.createSource(requireActivity().contentResolver, contentURI)
                            val bitmap = ImageDecoder.decodeBitmap(source)
+                           saveImageToInternalStorage(bitmap)
                            _binding.imageViewPlaceImage.setImageBitmap(bitmap)
                        }
                    }
@@ -126,6 +136,7 @@ class AddNewEventFragment : Fragment() {
                }
             } else if (requestCode == CAMERA && data != null) {
                 val photoFromCamera: Bitmap = data.extras?.get("data") as Bitmap
+                saveImageToInternalStorage(photoFromCamera)
                 _binding.imageViewPlaceImage.setImageBitmap(photoFromCamera)
             }
         }
@@ -195,5 +206,21 @@ class AddNewEventFragment : Fragment() {
                 .setNegativeButton("Cancel") {dialog, _->
                     dialog.dismiss()
                 }.show()
+    }
+
+    private fun saveImageToInternalStorage(bitmap: Bitmap): Uri{
+        val wrapper = ContextWrapper(activity?.applicationContext)
+        var file = wrapper.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            val stream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100, stream)
+            stream.flush()
+            stream.close()
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+        return Uri.parse(file.absolutePath)
     }
 }
