@@ -9,4 +9,7 @@
     <string name="new_event_text_use_map">USE MAP</string>
     <string name="new_event_add_image_text">ADD IMAGE</string>
     <string name="add_new_event_button_save">SAVE</string>
+    <string name="Picture_dialog_select_action">Select Action</string>
+    <string name="Picture_dialog_select_photo_from_gallery">Select photo from gallery</string>
+    <string name="Picture_dialog_capture_photo_from_camera">Capture photo from camera</string>
 </resources>
