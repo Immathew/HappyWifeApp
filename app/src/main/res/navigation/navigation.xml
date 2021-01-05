@@ -12,13 +12,16 @@
         tools:layout="@layout/fragment_title" >
         <action
             android:id="@+id/action_titleFragment_to_addNewEventFragment"
-            app:destination="@id/addNewEventFragment" />
+            app:destination="@id/addNewEventFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_titleFragment_to_allEventsListFragment"
-            app:destination="@id/allEventsListFragment" />
+            app:destination="@id/allEventsListFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_titleFragment_to_upcomingEventsFragment"
-            app:destination="@id/upcomingEventsFragment" />
+            app:destination="@id/upcomingEventsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/addNewEventFragment"

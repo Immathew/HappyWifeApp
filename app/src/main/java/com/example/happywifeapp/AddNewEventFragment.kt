@@ -2,6 +2,7 @@ package com.example.happywifeapp
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Application
 import android.app.DatePickerDialog
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -23,12 +24,19 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.happywifeapp.database.Event
+import com.example.happywifeapp.database.EventDatabase
+import com.example.happywifeapp.database.EventDatabaseDAO
 import com.example.happywifeapp.databinding.FragmentAddNewEventBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -40,8 +48,12 @@ import java.util.*
 class AddNewEventFragment : Fragment() {
 
     private lateinit var _binding: FragmentAddNewEventBinding
+    private lateinit var database: EventDatabaseDAO
     private var calendar = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
+    private var saveImageToInternalStorage: Uri? = null
+    private var mLatitude : Double = 0.0
+    private var mLongitude : Double = 0.0
 
     companion object {
         private const val GALLERY = 1
@@ -58,6 +70,12 @@ class AddNewEventFragment : Fragment() {
 
         setupToolbar(_binding)
 
+        val application = requireNotNull(this.activity).application
+
+        database = EventDatabase.getInstance(application).eventDatabaseDAO
+
+        val uiScope = CoroutineScope(Dispatchers.IO)
+
         dateSetListener = DatePickerDialog.OnDateSetListener {
             _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
@@ -65,6 +83,8 @@ class AddNewEventFragment : Fragment() {
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             updateDateInView()
         }
+
+        updateDateInView()
 
         _binding.editTextDate.setOnClickListener {
             DatePickerDialog(
@@ -79,8 +99,51 @@ class AddNewEventFragment : Fragment() {
             addNewImageDialogBox()
         }
 
+        _binding.addNewEventButtonSave.setOnClickListener {
+            when {
+                _binding.editTextTitle.text.isNullOrEmpty() -> {
+                    Toast.makeText(requireContext(), "Please enter title", Toast.LENGTH_SHORT).show()
+                }
+                _binding.editTextDescription.text.isNullOrEmpty() -> {
+                    Toast.makeText(requireContext(), "Please enter a description", Toast.LENGTH_SHORT).show()
+                }
+                _binding.editTextLocation.text.isNullOrEmpty() -> {
+                    Toast.makeText(requireContext(), "Please enter a location", Toast.LENGTH_SHORT).show()
+                }
+                saveImageToInternalStorage == null -> {
+                    Toast.makeText(requireContext(), "Please select a image", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+
+                    uiScope.launch {
+                        val newEvent = Event(
+                            0,
+                            _binding.editTextTitle.text.toString(),
+                            saveImageToInternalStorage.toString(),
+                            _binding.editTextDescription.text.toString(),
+                            _binding.editTextDate.text.toString(),
+                            _binding.editTextLocation.toString(),
+                            mLatitude,
+                            mLongitude
+                        )
+                        insert(newEvent)
+                    }
+
+                    if (EventDatabase.INSTANCE != null) {
+                        Toast.makeText(requireContext(), "Event added", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
         return _binding.root
 
+    }
+
+
+
+    private suspend fun insert(event: Event) {
+        database.insertEvent(event)
     }
 
     private fun addNewImageDialogBox() {
@@ -120,13 +183,13 @@ class AddNewEventFragment : Fragment() {
                        if (Build.VERSION.SDK_INT < 28) {
                            val selectedImageBitmap = MediaStore.Images.Media.getBitmap(
                                requireActivity().contentResolver, contentURI)
-                           saveImageToInternalStorage(selectedImageBitmap)
+                           saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap)
                            _binding.imageViewPlaceImage.setImageBitmap(selectedImageBitmap)
 
                        } else {
                            val source = ImageDecoder.createSource(requireActivity().contentResolver, contentURI)
                            val bitmap = ImageDecoder.decodeBitmap(source)
-                           saveImageToInternalStorage(bitmap)
+                           saveImageToInternalStorage = saveImageToInternalStorage(bitmap)
                            _binding.imageViewPlaceImage.setImageBitmap(bitmap)
                        }
                    }
@@ -136,7 +199,7 @@ class AddNewEventFragment : Fragment() {
                }
             } else if (requestCode == CAMERA && data != null) {
                 val photoFromCamera: Bitmap = data.extras?.get("data") as Bitmap
-                saveImageToInternalStorage(photoFromCamera)
+                saveImageToInternalStorage = saveImageToInternalStorage(photoFromCamera)
                 _binding.imageViewPlaceImage.setImageBitmap(photoFromCamera)
             }
         }
@@ -223,4 +286,6 @@ class AddNewEventFragment : Fragment() {
         }
         return Uri.parse(file.absolutePath)
     }
+
+
 }
