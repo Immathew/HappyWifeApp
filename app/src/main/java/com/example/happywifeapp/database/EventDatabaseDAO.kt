@@ -7,7 +7,7 @@ import androidx.room.*
 interface EventDatabaseDAO {
 
     @Insert
-    fun insertEvent (event: Event)
+    suspend fun insertEvent (event: Event)
 
     @Update
     fun updateEvent(event: Event)

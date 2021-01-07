@@ -25,17 +25,17 @@
     </fragment>
     <fragment
         android:id="@+id/addNewEventFragment"
-        android:name="com.example.happywifeapp.AddNewEventFragment"
+        android:name="com.example.happywifeapp.addNewEvent.AddNewEventFragment"
         android:label="fragment_add_new_event"
         tools:layout="@layout/fragment_add_new_event" />
     <fragment
         android:id="@+id/allEventsListFragment"
-        android:name="com.example.happywifeapp.AllEventsListFragment"
+        android:name="com.example.happywifeapp.allEvents.AllEventsListFragment"
         android:label="fragment_all_events_list"
         tools:layout="@layout/fragment_all_events_list" />
     <fragment
         android:id="@+id/upcomingEventsFragment"
-        android:name="com.example.happywifeapp.UpcomingEventsFragment"
+        android:name="com.example.happywifeapp.upcomingEvents.UpcomingEventsFragment"
         android:label="fragment_upcoming_events"
         tools:layout="@layout/fragment_upcoming_events" />
 </navigation>

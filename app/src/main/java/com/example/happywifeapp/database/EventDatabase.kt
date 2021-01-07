@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 @Database(entities = [Event::class], version = 1, exportSchema = false)
 abstract class EventDatabase : RoomDatabase() {
 
-    abstract val eventDatabaseDAO: EventDatabaseDAO
+    abstract fun eventDatabaseDAO(): EventDatabaseDAO
 
     companion object{
 

@@ -1,12 +1,12 @@
-package com.example.happywifeapp
+package com.example.happywifeapp.upcomingEvents
 
 import android.os.Bundle
-import android.renderscript.ScriptGroup
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.example.happywifeapp.R
 import com.example.happywifeapp.databinding.FragmentUpcomingEventsBinding
 
 class UpcomingEventsFragment : Fragment() {

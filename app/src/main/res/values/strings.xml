@@ -12,4 +12,6 @@
     <string name="Picture_dialog_select_action">Select Action</string>
     <string name="Picture_dialog_select_photo_from_gallery">Select photo from gallery</string>
     <string name="Picture_dialog_capture_photo_from_camera">Capture photo from camera</string>
+    <string name="all_events_list">ALL EVENTS</string>
+    <string name="image_content_description">image</string>
 </resources>

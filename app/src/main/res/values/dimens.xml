@@ -15,4 +15,22 @@
     <dimen name="add_new_event_button_save_marginTop">24dp</dimen>
     <dimen name="add_new_event_button_save_paddingTopBottom">8dp</dimen>
     <dimen name="add_new_event_button_size">18sp</dimen>
+
+    <dimen name="item_event_cv_main_marginStartEnd">8dp</dimen>
+    <dimen name="item_event_cv_corner_radius">3dp</dimen>
+    <dimen name="item_event_cv_elevation">3dp</dimen>
+    <dimen name="item_events_content_padding">5dp</dimen>
+    <dimen name="item_event_circular_image_size">70dp</dimen>
+    <dimen name="item_event_ll_marginStart">10dp</dimen>
+    <dimen name="item_event_ll_marginEnd">2dp</dimen>
+    <dimen name="item_event_title_textSize">16sp</dimen>
+    <dimen name="item_event_description_textSize">14sp</dimen>
+
+    <dimen name="detail_screen_image_height_size">250dp</dimen>
+    <dimen name="detail_screen_description_margin">8dp</dimen>
+    <dimen name="detail_screen_description_text_size">16sp</dimen>
+    <dimen name="detail_screen_location_marginStartEnd">8dp</dimen>
+    <dimen name="detail_screen_location_marginTop">16dp</dimen>
+    <dimen name="detail_screen_location_text_size">18sp</dimen>
+    <dimen name="item_view_date_text_size">18sp</dimen>
 </resources>
