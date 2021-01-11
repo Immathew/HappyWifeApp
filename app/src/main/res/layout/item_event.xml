@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/one_item_layout">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -77,8 +78,6 @@
                     tools:text="01.01.2020"/>
             </LinearLayout>
         </LinearLayout>
-
-
 
     </androidx.cardview.widget.CardView>
 

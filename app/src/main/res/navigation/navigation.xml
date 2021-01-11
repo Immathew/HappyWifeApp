@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/addNewEventFragment"
         android:name="com.example.happywifeapp.addNewEvent.AddNewEventFragment"
-        android:label="fragment_add_new_event"
+        android:label="Add new event"
         tools:layout="@layout/fragment_add_new_event" >
         <action
             android:id="@+id/action_addNewEventFragment_to_allEventsListFragment"
@@ -35,7 +35,7 @@
     <fragment
         android:id="@+id/allEventsListFragment"
         android:name="com.example.happywifeapp.allEvents.AllEventsListFragment"
-        android:label="fragment_all_events_list"
+        android:label="All events"
         tools:layout="@layout/fragment_all_events_list" >
         <action
             android:id="@+id/action_allEventsListFragment_to_updateEventFragment"
@@ -44,14 +44,17 @@
     <fragment
         android:id="@+id/upcomingEventsFragment"
         android:name="com.example.happywifeapp.upcomingEvents.UpcomingEventsFragment"
-        android:label="fragment_upcoming_events"
+        android:label="Upcoming events"
         tools:layout="@layout/fragment_upcoming_events" />
     <fragment
         android:id="@+id/updateEventFragment"
         android:name="com.example.happywifeapp.updateEvent.UpdateEventFragment"
-        android:label="UpdateEventFragment" >
+        android:label="Update event" >
         <action
             android:id="@+id/action_updateEventFragment_to_allEventsListFragment"
             app:destination="@id/allEventsListFragment" />
+        <argument
+            android:name="currentEvent"
+            app:argType="com.example.happywifeapp.database.Event" />
     </fragment>
 </navigation>

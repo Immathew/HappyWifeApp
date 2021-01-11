@@ -128,7 +128,7 @@ class AddNewEventFragment : Fragment() {
                         saveImageToInternalStorage.toString(),
                         _binding.editTextDescription.text.toString(),
                         _binding.editTextDate.text.toString(),
-                        _binding.editTextLocation.toString(),
+                        _binding.editTextLocation.text.toString(),
                         mLatitude,
                         mLongitude
                     )
@@ -265,6 +265,7 @@ class AddNewEventFragment : Fragment() {
                             val uri = Uri.fromParts("package", activity?.packageName, null)
                             intent.data = uri
                             startActivity(intent)
+
                         } catch (e: ActivityNotFoundException) {
                             e.printStackTrace()
                         }

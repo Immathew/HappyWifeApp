@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+
 import com.example.happywifeapp.R
 import com.example.happywifeapp.databinding.FragmentUpcomingEventsBinding
 
+
 class UpcomingEventsFragment : Fragment() {
+
 
 
     override fun onCreateView(

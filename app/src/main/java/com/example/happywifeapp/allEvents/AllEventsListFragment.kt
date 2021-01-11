@@ -10,13 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.happywifeapp.R
 import com.example.happywifeapp.database.EventDatabase
 import com.example.happywifeapp.databinding.FragmentAllEventsListBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.happywifeapp.utils.SwipeToEditCallback
 
 class AllEventsListFragment : Fragment() {
 
@@ -42,10 +41,21 @@ class AllEventsListFragment : Fragment() {
         val adapter = EventsAdapter()
         binding.recyclerViewEventList.adapter = adapter
 
+        val swipeHandler = object : SwipeToEditCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = binding.recyclerViewEventList.adapter as EventsAdapter
+
+                val navigateToEdit = adapter.editAt(viewHolder.adapterPosition)
+                findNavController().navigate(navigateToEdit)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerViewEventList)
+
+
         allEventsListViewModel.readAllData.observe(viewLifecycleOwner, Observer { event ->
             adapter.setData(event)
         })
-
 
         binding.allEventsListViewModel = allEventsListViewModel
         binding.lifecycleOwner = this
