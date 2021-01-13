@@ -6,7 +6,4 @@ class EventRepository(private val eventDao: EventDatabaseDAO) {
 
     val readAllData: LiveData<List<Event>> = eventDao.getAllEvents()
 
-    suspend fun addEvent (event: Event) {
-        eventDao.insertEvent(event)
-    }
 }

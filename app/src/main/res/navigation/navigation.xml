@@ -27,11 +27,7 @@
         android:id="@+id/addNewEventFragment"
         android:name="com.example.happywifeapp.addNewEvent.AddNewEventFragment"
         android:label="Add new event"
-        tools:layout="@layout/fragment_add_new_event" >
-        <action
-            android:id="@+id/action_addNewEventFragment_to_allEventsListFragment"
-            app:destination="@id/allEventsListFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_add_new_event" />
     <fragment
         android:id="@+id/allEventsListFragment"
         android:name="com.example.happywifeapp.allEvents.AllEventsListFragment"
@@ -49,7 +45,8 @@
     <fragment
         android:id="@+id/updateEventFragment"
         android:name="com.example.happywifeapp.updateEvent.UpdateEventFragment"
-        android:label="Update event" >
+        android:label="Update event"
+        tools:layout="@layout/fragment_update_event">
         <action
             android:id="@+id/action_updateEventFragment_to_allEventsListFragment"
             app:destination="@id/allEventsListFragment" />

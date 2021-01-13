@@ -15,6 +15,7 @@ interface EventDatabaseDAO {
     @Delete
     fun deleteEvent(event: Event)
 
+
     @Query("SELECT * FROM events_to_remember_table WHERE eventId= :key")
     fun getEvent(key: Int): Event
 

@@ -52,9 +52,9 @@ class AddNewEventFragment : Fragment() {
     private var mLongitude : Double = 0.0
 
     companion object {
-        private const val GALLERY = 1
-        private const val CAMERA = 2
-        private const val IMAGE_DIRECTORY = "HappyPlacesImages"
+         const val GALLERY = 1
+         const val CAMERA = 2
+         const val IMAGE_DIRECTORY = "HappyPlacesImages"
     }
 
     override fun onCreateView(
@@ -97,6 +97,7 @@ class AddNewEventFragment : Fragment() {
 
         _binding.addNewEventButtonSave.setOnClickListener {
             checksUsersInputAndSaveEventToDatabase(uiScope)
+
         }
 
         return _binding.root
@@ -134,6 +135,7 @@ class AddNewEventFragment : Fragment() {
                     )
                     insert(newEvent)
                 }
+                findNavController().popBackStack()
 
                 if (EventDatabase.INSTANCE != null) {
                     Toast.makeText(requireContext(), "Event added", Toast.LENGTH_SHORT).show()
@@ -171,7 +173,7 @@ class AddNewEventFragment : Fragment() {
     }
 
     private fun updateDateInView() {
-        val myFormat = "dd.MM.yyyy"
+        val myFormat = "dd-MM-yyyy"
         val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
         _binding.editTextDate.setText(sdf.format(calendar.time).toString())
     }
@@ -250,7 +252,7 @@ class AddNewEventFragment : Fragment() {
             override fun onPermissionRationaleShouldBeShown(
                     permissions: MutableList<PermissionRequest>,
                     token: PermissionToken) {
-
+                
                 showRationDialogForPermissions()
             }
         }).onSameThread().check()

@@ -2,29 +2,16 @@ package com.example.happywifeapp.allEvents
 
 
 import android.net.Uri
-import android.text.Layout
-import android.text.style.ClickableSpan
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.LiveData
-import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.happywifeapp.R
 import com.example.happywifeapp.database.Event
-import com.example.happywifeapp.updateEvent.UpdateEventFragmentDirections
-import com.example.happywifeapp.utils.SwipeToEditCallback
-import kotlinx.coroutines.withContext
+
 
 
 class EventsAdapter(): RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
@@ -68,9 +55,13 @@ class EventsAdapter(): RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
         val item = data[position]
         val action = AllEventsListFragmentDirections
             .actionAllEventsListFragmentToUpdateEventFragment(item)
-        notifyItemChanged(position)
         return action
     }
 
+    fun removeAt(position: Int): Int {
+        val item = data[position]
+      //  notifyItemRemoved(position)
+        return item.eventId
+    }
 
 }
