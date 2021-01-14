@@ -15,10 +15,17 @@ interface EventDatabaseDAO {
     @Delete
     fun deleteEvent(event: Event)
 
+    @Query("SELECT * FROM events_to_remember_table WHERE date LIKE '%' ||  :currentMonth  || '%' ORDER BY date ASC")
+    fun getAllEventsInThisMonth(currentMonth: String): LiveData<List<Event>>
+
+    @Query("SELECT * FROM events_to_remember_table WHERE date LIKE '%' || :nextMonth || '%' ORDER BY date ASC")
+    fun getAllEventsInNextMonth(nextMonth: String): LiveData<List<Event>>
 
     @Query("SELECT * FROM events_to_remember_table WHERE eventId= :key")
     fun getEvent(key: Int): Event
 
-    @Query("SELECT * FROM events_to_remember_table ORDER BY date ASC")
+    @Query("SELECT * FROM events_to_remember_table ORDER BY eventId DESC")
     fun getAllEvents(): LiveData<List<Event>>
+
+
 }

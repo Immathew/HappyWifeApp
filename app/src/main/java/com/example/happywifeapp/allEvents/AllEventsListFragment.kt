@@ -85,10 +85,6 @@ class AllEventsListFragment : Fragment() {
             adapter.setData(event)
         })
 
-//        allEventsListViewModel.getEventsInThisAndNextMonth.observe(viewLifecycleOwner, Observer { event ->
-//            adapter.setData(event)
-//        })
-
         binding.allEventsListViewModel = allEventsListViewModel
         binding.lifecycleOwner = this
 

@@ -35,7 +35,8 @@
         tools:layout="@layout/fragment_all_events_list" >
         <action
             android:id="@+id/action_allEventsListFragment_to_updateEventFragment"
-            app:destination="@id/updateEventFragment" />
+            app:destination="@id/updateEventFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/upcomingEventsFragment"
@@ -47,9 +48,6 @@
         android:name="com.example.happywifeapp.updateEvent.UpdateEventFragment"
         android:label="Update event"
         tools:layout="@layout/fragment_update_event">
-        <action
-            android:id="@+id/action_updateEventFragment_to_allEventsListFragment"
-            app:destination="@id/allEventsListFragment" />
         <argument
             android:name="currentEvent"
             app:argType="com.example.happywifeapp.database.Event" />

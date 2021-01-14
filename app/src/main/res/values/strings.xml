@@ -16,4 +16,5 @@
     <string name="image_content_description">image</string>
     <string name="update_event_button">UPDATE</string>
     <string name="update_event">Update event</string>
+    <string name="upcoming_events">Upcoming events</string>
 </resources>

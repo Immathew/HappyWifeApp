@@ -53,14 +53,12 @@ class EventsAdapter(): RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
 
     fun editAt(position: Int): NavDirections {
         val item = data[position]
-        val action = AllEventsListFragmentDirections
+        return AllEventsListFragmentDirections
             .actionAllEventsListFragmentToUpdateEventFragment(item)
-        return action
     }
 
     fun removeAt(position: Int): Int {
         val item = data[position]
-      //  notifyItemRemoved(position)
         return item.eventId
     }
 

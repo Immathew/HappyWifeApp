@@ -93,7 +93,7 @@ class UpdateEventFragment : Fragment() {
 
         binding.updateEventButton.setOnClickListener {
             checkUserInputAndUpdateEvent(uiScope)
-            findNavController().navigate(R.id.action_updateEventFragment_to_allEventsListFragment)
+            findNavController().popBackStack()
         }
 
         return binding.root
