@@ -164,8 +164,6 @@ class UpdateEventFragment : Fragment() {
                             updateDescription,
                             updateDate,
                             updateLocation,
-                            args.currentEvent.latitude,
-                            args.currentEvent.longitude
                     )
                     update(updatedEvent)
                 }

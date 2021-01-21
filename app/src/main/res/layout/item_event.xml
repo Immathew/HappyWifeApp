@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/one_item_layout">
+    android:id="@+id/one_item_layout"
+    >
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -17,14 +18,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:padding="@dimen/item_events_content_padding">
+            android:padding="@dimen/item_events_content_padding"
+            android:background="?attr/selectableItemBackground">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/item_view_place_image"

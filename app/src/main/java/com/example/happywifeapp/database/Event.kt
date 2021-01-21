@@ -23,8 +23,5 @@ data class Event(
         val date: String?,
         @ColumnInfo(name = "location")
         val location: String?,
-        @ColumnInfo(name = "latitude")
-        val latitude: Double,
-        @ColumnInfo(name = "longitude")
-        val longitude: Double
+
 ): Parcelable

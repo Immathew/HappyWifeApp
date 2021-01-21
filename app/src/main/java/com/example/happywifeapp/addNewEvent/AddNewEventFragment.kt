@@ -27,6 +27,7 @@ import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.database.EventDatabase
 import com.example.happywifeapp.database.EventDatabaseDAO
 import com.example.happywifeapp.databinding.FragmentAddNewEventBinding
+import com.google.android.libraries.places.api.Places
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -48,8 +49,6 @@ class AddNewEventFragment : Fragment() {
     private var calendar = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     private var saveImageToInternalStorage: Uri? = null
-    private var mLatitude : Double = 0.0
-    private var mLongitude : Double = 0.0
 
     companion object {
          const val GALLERY = 1
@@ -130,8 +129,6 @@ class AddNewEventFragment : Fragment() {
                         _binding.editTextDescription.text.toString(),
                         _binding.editTextDate.text.toString(),
                         _binding.editTextLocation.text.toString(),
-                        mLatitude,
-                        mLongitude
                     )
                     insert(newEvent)
                 }

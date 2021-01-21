@@ -14,12 +14,15 @@ class UpcomingEventsViewModel(
         application: Application) : AndroidViewModel(application) {
 
      val getEventsInThisMonth: LiveData<List<Event>>
+     val getEventInNextMonth: LiveData<List<Event>>
+
      private val repository: EventRepository
 
      init {
          val eventDao = EventDatabase.getInstance(application).eventDatabaseDAO()
          repository = EventRepository(eventDao)
          getEventsInThisMonth = repository.readThisMonthEvents
+         getEventInNextMonth = repository.readNextMonthEvents
      }
 
 }

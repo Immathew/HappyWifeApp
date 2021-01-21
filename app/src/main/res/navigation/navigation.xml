@@ -42,12 +42,25 @@
         android:id="@+id/upcomingEventsFragment"
         android:name="com.example.happywifeapp.upcomingEvents.UpcomingEventsFragment"
         android:label="Upcoming events"
-        tools:layout="@layout/fragment_upcoming_events" />
+        tools:layout="@layout/fragment_upcoming_events" >
+        <action
+            android:id="@+id/action_upcomingEventsFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/updateEventFragment"
         android:name="com.example.happywifeapp.updateEvent.UpdateEventFragment"
         android:label="Update event"
         tools:layout="@layout/fragment_update_event">
+        <argument
+            android:name="currentEvent"
+            app:argType="com.example.happywifeapp.database.Event" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventDetailsFragment"
+        android:name="com.example.happywifeapp.eventDetails.EventDetailsFragment"
+        tools:layout="@layout/fragment_event_details"
+        android:label="EventDetailsFragment" >
         <argument
             android:name="currentEvent"
             app:argType="com.example.happywifeapp.database.Event" />

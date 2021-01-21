@@ -27,6 +27,7 @@ class UpcomingEventsFragment : Fragment() {
 
     private lateinit var binding: FragmentUpcomingEventsBinding
     private lateinit var dataSource: EventDatabaseDAO
+    var toggleFabButton = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,12 +54,35 @@ class UpcomingEventsFragment : Fragment() {
             adapter.setData(event)
         })
 
+        binding.fabNextMonthButton.setOnClickListener {
+            setupCorrectFab()
+
+            if (!toggleFabButton) {
+                upcomingEventsViewModel.getEventsInThisMonth.observe(viewLifecycleOwner, Observer { event ->
+                    adapter.setData(event)
+                })
+            } else if (toggleFabButton){
+                upcomingEventsViewModel.getEventInNextMonth.observe(viewLifecycleOwner, Observer { event ->
+                    adapter.setData(event)
+                })
+            }
+        }
+
         binding.upcomingEventsViewModel = upcomingEventsViewModel
         binding.lifecycleOwner = this
 
         return binding.root
     }
 
+    private fun setupCorrectFab() {
+        if (!toggleFabButton) {
+            toggleFabButton = true
+            binding.textInFab.text = getString(R.string.see_previous_month)
+        } else if (toggleFabButton){
+            toggleFabButton = false
+            binding.textInFab.text = getString(R.string.see_next_month)
+        }
+    }
 
     private fun setupToolbar() {
         val navController = findNavController()

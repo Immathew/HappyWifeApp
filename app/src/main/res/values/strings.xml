@@ -17,4 +17,8 @@
     <string name="update_event_button">UPDATE</string>
     <string name="update_event">Update event</string>
     <string name="upcoming_events">Upcoming events</string>
+
+
+    <string name="see_next_month">Next month</string>
+    <string name="see_previous_month">Previous\nmonth</string>
 </resources>
