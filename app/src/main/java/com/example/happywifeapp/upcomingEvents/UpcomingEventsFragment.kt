@@ -47,10 +47,10 @@ class UpcomingEventsFragment : Fragment() {
 
         setupToolbar()
 
-        val adapter = EventsAdapter()
+        val adapter = UpcomingEventsAdapter()
         binding.recyclerViewUpcomingEventsList.adapter = adapter
 
-        upcomingEventsViewModel.getEventsInThisMonth.observe(viewLifecycleOwner, Observer { event ->
+        upcomingEventsViewModel.getEventsInThisMonth.observe(viewLifecycleOwner, { event ->
             adapter.setData(event)
         })
 
@@ -58,11 +58,11 @@ class UpcomingEventsFragment : Fragment() {
             setupCorrectFab()
 
             if (!toggleFabButton) {
-                upcomingEventsViewModel.getEventsInThisMonth.observe(viewLifecycleOwner, Observer { event ->
+                upcomingEventsViewModel.getEventsInThisMonth.observe(viewLifecycleOwner,  { event ->
                     adapter.setData(event)
                 })
             } else if (toggleFabButton){
-                upcomingEventsViewModel.getEventInNextMonth.observe(viewLifecycleOwner, Observer { event ->
+                upcomingEventsViewModel.getEventInNextMonth.observe(viewLifecycleOwner,  { event ->
                     adapter.setData(event)
                 })
             }
