@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import java.util.*
 
 
-class EventRepository(private val eventDao: EventDatabaseDAO) {
+class EventRepository(eventDao: EventDatabaseDAO) {
 
     private var calendar = Calendar.getInstance()
 
