@@ -1,4 +1,4 @@
-package com.example.happywifeapp.eventDetails
+package com.example.happywifeapp.ui.fragments
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

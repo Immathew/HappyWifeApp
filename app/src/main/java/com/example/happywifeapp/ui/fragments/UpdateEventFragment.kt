@@ -1,4 +1,4 @@
-package com.example.happywifeapp.updateEvent
+package com.example.happywifeapp.ui.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -22,18 +22,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import com.example.happywifeapp.R
-import com.example.happywifeapp.addNewEvent.AddNewEventFragment
 import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.database.EventDatabase
 import com.example.happywifeapp.database.EventDatabaseDAO
-import com.example.happywifeapp.databinding.FragmentAddNewEventBinding
-import com.example.happywifeapp.databinding.FragmentAllEventsListBinding
-import com.example.happywifeapp.databinding.FragmentUpcomingEventsBinding
 import com.example.happywifeapp.databinding.FragmentUpdateEventBinding
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

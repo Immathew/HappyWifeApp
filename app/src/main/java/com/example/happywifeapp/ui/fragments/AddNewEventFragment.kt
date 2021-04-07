@@ -1,4 +1,4 @@
-package com.example.happywifeapp.addNewEvent
+package com.example.happywifeapp.ui.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -27,7 +27,6 @@ import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.database.EventDatabase
 import com.example.happywifeapp.database.EventDatabaseDAO
 import com.example.happywifeapp.databinding.FragmentAddNewEventBinding
-import com.google.android.libraries.places.api.Places
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken

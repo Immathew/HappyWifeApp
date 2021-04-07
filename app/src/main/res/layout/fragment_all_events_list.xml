@@ -6,14 +6,14 @@
     <data>
         <variable
             name="allEventsListViewModel"
-            type="com.example.happywifeapp.allEvents.AllEventsListViewModel" />
+            type="com.example.happywifeapp.ui.viewModels.AllEventsListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        tools:context=".allEvents.AllEventsListFragment">
+        tools:context=".ui.fragments.AllEventsListFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_all_events_list"

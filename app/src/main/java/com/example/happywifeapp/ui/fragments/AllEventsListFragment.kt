@@ -1,8 +1,6 @@
-package com.example.happywifeapp.allEvents
+package com.example.happywifeapp.ui.fragments
 
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +15,14 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.happywifeapp.R
+import com.example.happywifeapp.adapters.EventsAdapter
 import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.database.EventDatabase
 import com.example.happywifeapp.database.EventDatabaseDAO
 import com.example.happywifeapp.databinding.FragmentAllEventsListBinding
 import com.example.happywifeapp.databinding.ItemEventBinding
+import com.example.happywifeapp.ui.viewModels.AllEventsListViewModel
+import com.example.happywifeapp.ui.viewModels.AllEventsListViewModelFactory
 import com.example.happywifeapp.utils.SwipeToDeleteCallback
 import com.example.happywifeapp.utils.SwipeToEditCallback
 import kotlinx.coroutines.CoroutineScope

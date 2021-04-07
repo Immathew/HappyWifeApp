@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".updateEvent.UpdateEventFragment">
+        tools:context=".ui.fragments.UpdateEventFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_update_event"

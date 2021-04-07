@@ -1,4 +1,4 @@
-package com.example.happywifeapp.allEvents
+package com.example.happywifeapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,6 +7,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.databinding.ItemEventBinding
+import com.example.happywifeapp.ui.fragments.AllEventsListFragmentDirections
 
 
 class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
@@ -27,7 +28,10 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
 
 
         holder.itemView.setOnClickListener {
-            val action = AllEventsListFragmentDirections.actionAllEventsListFragmentToEventDetailsFragment(item)
+            val action =
+                AllEventsListFragmentDirections.actionAllEventsListFragmentToEventDetailsFragment(
+                    item
+                )
             Navigation.findNavController(holder.itemView).navigate(action)
         }
 
@@ -58,8 +62,7 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
 
     fun editAt(position: Int): NavDirections {
         val item = data[position]
-        return AllEventsListFragmentDirections
-            .actionAllEventsListFragmentToUpdateEventFragment(item)
+        return AllEventsListFragmentDirections.actionAllEventsListFragmentToUpdateEventFragment(item)
     }
 
     fun removeAt(position: Int): Int {

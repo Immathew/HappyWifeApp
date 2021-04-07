@@ -1,4 +1,4 @@
-package com.example.happywifeapp
+package com.example.happywifeapp.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
+import com.example.happywifeapp.R
 import com.example.happywifeapp.databinding.FragmentTitleBinding
 
 

@@ -1,4 +1,4 @@
-package com.example.happywifeapp.upcomingEvents
+package com.example.happywifeapp.ui.viewModels
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

@@ -1,12 +1,12 @@
-package com.example.happywifeapp.upcomingEvents
+package com.example.happywifeapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.databinding.ItemEventBinding
+import com.example.happywifeapp.ui.fragments.UpcomingEventsFragmentDirections
 
 class UpcomingEventsAdapter : RecyclerView.Adapter<UpcomingEventsAdapter.MyViewHolder>() {
 

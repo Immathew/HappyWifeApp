@@ -1,4 +1,4 @@
-package com.example.happywifeapp.upcomingEvents
+package com.example.happywifeapp.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,21 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-
 import com.example.happywifeapp.R
-import com.example.happywifeapp.allEvents.AllEventsListViewModel
-import com.example.happywifeapp.allEvents.AllEventsListViewModelFactory
-import com.example.happywifeapp.allEvents.EventsAdapter
 import com.example.happywifeapp.database.EventDatabase
 import com.example.happywifeapp.database.EventDatabaseDAO
-import com.example.happywifeapp.databinding.FragmentAllEventsListBinding
 import com.example.happywifeapp.databinding.FragmentUpcomingEventsBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.example.happywifeapp.ui.viewModels.UpcomingEventsViewModel
+import com.example.happywifeapp.ui.viewModels.UpcomingEventsViewModelFactory
+import com.example.happywifeapp.adapters.UpcomingEventsAdapter
 
 
 class UpcomingEventsFragment : Fragment() {

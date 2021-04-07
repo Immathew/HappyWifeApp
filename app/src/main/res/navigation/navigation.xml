@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/titleFragment"
-        android:name="com.example.happywifeapp.TitleFragment"
+        android:name="com.example.happywifeapp.ui.TitleFragment"
         android:label="fragment_title"
         tools:layout="@layout/fragment_title" >
         <action
@@ -25,12 +25,12 @@
     </fragment>
     <fragment
         android:id="@+id/addNewEventFragment"
-        android:name="com.example.happywifeapp.addNewEvent.AddNewEventFragment"
+        android:name="com.example.happywifeapp.ui.fragments.AddNewEventFragment"
         android:label="Add new event"
         tools:layout="@layout/fragment_add_new_event" />
     <fragment
         android:id="@+id/allEventsListFragment"
-        android:name="com.example.happywifeapp.allEvents.AllEventsListFragment"
+        android:name="com.example.happywifeapp.ui.fragments.AllEventsListFragment"
         android:label="All events"
         tools:layout="@layout/fragment_all_events_list" >
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/upcomingEventsFragment"
-        android:name="com.example.happywifeapp.upcomingEvents.UpcomingEventsFragment"
+        android:name="com.example.happywifeapp.ui.fragments.UpcomingEventsFragment"
         android:label="Upcoming events"
         tools:layout="@layout/fragment_upcoming_events" >
         <action
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/updateEventFragment"
-        android:name="com.example.happywifeapp.updateEvent.UpdateEventFragment"
+        android:name="com.example.happywifeapp.ui.fragments.UpdateEventFragment"
         android:label="Update event"
         tools:layout="@layout/fragment_update_event">
         <argument
@@ -61,7 +61,7 @@
     </fragment>
     <fragment
         android:id="@+id/eventDetailsFragment"
-        android:name="com.example.happywifeapp.eventDetails.EventDetailsFragment"
+        android:name="com.example.happywifeapp.ui.fragments.EventDetailsFragment"
         tools:layout="@layout/fragment_event_details"
         android:label="EventDetailsFragment" >
         <argument
