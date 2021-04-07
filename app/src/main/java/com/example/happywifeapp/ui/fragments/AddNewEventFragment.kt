@@ -19,7 +19,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.happywifeapp.R
@@ -43,7 +42,9 @@ import java.util.*
 
 class AddNewEventFragment : Fragment() {
 
-    private lateinit var _binding: FragmentAddNewEventBinding
+    private var _binding: FragmentAddNewEventBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var database: EventDatabaseDAO
     private var calendar = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
@@ -59,11 +60,9 @@ class AddNewEventFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_add_new_event, container, false
-        )
+        _binding = FragmentAddNewEventBinding.inflate(inflater, container, false)
 
-        setupToolbar(_binding)
+        setupToolbar(binding)
 
         val application = requireNotNull(this.activity).application
 
@@ -80,7 +79,7 @@ class AddNewEventFragment : Fragment() {
 
         updateDateInView()
 
-        _binding.editTextDate.setOnClickListener {
+        binding.editTextDate.setOnClickListener {
             DatePickerDialog(
                 requireActivity(),
                 dateSetListener,
@@ -90,29 +89,28 @@ class AddNewEventFragment : Fragment() {
             ).show()
         }
 
-        _binding.textViewAddImage.setOnClickListener {
+        binding.textViewAddImage.setOnClickListener {
             addNewImageDialogBox()
         }
 
-        _binding.addNewEventButtonSave.setOnClickListener {
+        binding.addNewEventButtonSave.setOnClickListener {
             checksUsersInputAndSaveEventToDatabase(uiScope)
-
         }
 
-        return _binding.root
+        return binding.root
 
     }
 
     private fun checksUsersInputAndSaveEventToDatabase(uiScope: CoroutineScope) {
         when {
-            _binding.editTextTitle.text.isNullOrEmpty() -> {
+            binding.editTextTitle.text.isNullOrEmpty() -> {
                 Toast.makeText(requireContext(), "Please enter title", Toast.LENGTH_SHORT).show()
             }
-            _binding.editTextDescription.text.isNullOrEmpty() -> {
+            binding.editTextDescription.text.isNullOrEmpty() -> {
                 Toast.makeText(requireContext(), "Please enter a description", Toast.LENGTH_SHORT)
                     .show()
             }
-            _binding.editTextLocation.text.isNullOrEmpty() -> {
+            binding.editTextLocation.text.isNullOrEmpty() -> {
                 Toast.makeText(requireContext(), "Please enter a location", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -124,11 +122,11 @@ class AddNewEventFragment : Fragment() {
                 uiScope.launch {
                     val newEvent = Event(
                         0,
-                        _binding.editTextTitle.text.toString(),
+                        binding.editTextTitle.text.toString(),
                         saveImageToInternalStorage.toString(),
-                        _binding.editTextDescription.text.toString(),
-                        _binding.editTextDate.text.toString(),
-                        _binding.editTextLocation.text.toString(),
+                        binding.editTextDescription.text.toString(),
+                        binding.editTextDate.text.toString(),
+                        binding.editTextLocation.text.toString(),
                     )
                     insert(newEvent)
                 }
@@ -174,7 +172,7 @@ class AddNewEventFragment : Fragment() {
     private fun updateDateInView() {
         val myFormat = "dd-MM-yyyy"
         val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
-        _binding.editTextDate.setText(sdf.format(calendar.time).toString())
+        binding.editTextDate.setText(sdf.format(calendar.time).toString())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -195,7 +193,7 @@ class AddNewEventFragment : Fragment() {
                                 true
                             )
                             saveImageToInternalStorage = saveImageToInternalStorage(scaleBitmap)
-                            _binding.imageViewPlaceImage.setImageBitmap(scaleBitmap)
+                            binding.imageViewPlaceImage.setImageBitmap(scaleBitmap)
 
                         } else {
                             val source = ImageDecoder.createSource(
@@ -204,7 +202,7 @@ class AddNewEventFragment : Fragment() {
                             )
                             val bitmap = ImageDecoder.decodeBitmap(source)
                             saveImageToInternalStorage = saveImageToInternalStorage(bitmap)
-                            _binding.imageViewPlaceImage.setImageBitmap(bitmap)
+                            binding.imageViewPlaceImage.setImageBitmap(bitmap)
                         }
                     }
                 } catch (e: IOException) {
@@ -215,7 +213,7 @@ class AddNewEventFragment : Fragment() {
             } else if (requestCode == CAMERA && data != null) {
                 val photoFromCamera: Bitmap = data.extras?.get("data") as Bitmap
                 saveImageToInternalStorage = saveImageToInternalStorage(photoFromCamera)
-                _binding.imageViewPlaceImage.setImageBitmap(photoFromCamera)
+                binding.imageViewPlaceImage.setImageBitmap(photoFromCamera)
             }
         }
     }
@@ -309,5 +307,8 @@ class AddNewEventFragment : Fragment() {
         return Uri.parse(file.absolutePath)
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

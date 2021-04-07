@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -20,7 +19,6 @@ import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.database.EventDatabase
 import com.example.happywifeapp.database.EventDatabaseDAO
 import com.example.happywifeapp.databinding.FragmentAllEventsListBinding
-import com.example.happywifeapp.databinding.ItemEventBinding
 import com.example.happywifeapp.ui.viewModels.AllEventsListViewModel
 import com.example.happywifeapp.ui.viewModels.AllEventsListViewModelFactory
 import com.example.happywifeapp.utils.SwipeToDeleteCallback
@@ -33,17 +31,17 @@ import kotlinx.coroutines.withContext
 class AllEventsListFragment : Fragment() {
 
     private lateinit var dataSource: EventDatabaseDAO
-    private var _bindingItemEvent: ItemEventBinding? = null
-    private val bindingItemEvent get() = _bindingItemEvent
+
+    private var _binding: FragmentAllEventsListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding: FragmentAllEventsListBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_all_events_list, container, false
+        _binding = FragmentAllEventsListBinding.inflate(
+            inflater, container, false
         )
-        _bindingItemEvent = ItemEventBinding.inflate(layoutInflater)
 
         val application = requireNotNull(this.activity).application
 
@@ -93,7 +91,7 @@ class AllEventsListFragment : Fragment() {
 
         lifecycleScope.launch {
             allEventsListViewModel.readAllData.observe(viewLifecycleOwner, Observer { event ->
-                    adapter.setData(event)
+                adapter.setData(event)
 
             })
         }
@@ -116,6 +114,6 @@ class AllEventsListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _bindingItemEvent = null
+        _binding = null
     }
 }

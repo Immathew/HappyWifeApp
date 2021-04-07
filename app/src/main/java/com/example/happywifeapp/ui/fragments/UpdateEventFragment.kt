@@ -39,7 +39,9 @@ import java.util.*
 
 class UpdateEventFragment : Fragment() {
 
-    private lateinit var binding: FragmentUpdateEventBinding
+    private var _binding: FragmentUpdateEventBinding? = null
+    private val binding get() = _binding!!
+
     private val args by navArgs<UpdateEventFragmentArgs>()
     private lateinit var database: EventDatabaseDAO
     private var calendar = Calendar.getInstance()
@@ -50,8 +52,7 @@ class UpdateEventFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-            binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_update_event, container, false)
+        _binding = FragmentUpdateEventBinding.inflate(layoutInflater, container, false)
 
         setupToolbar()
         populateTextFieldsFromArgs()
@@ -62,8 +63,7 @@ class UpdateEventFragment : Fragment() {
 
         val uiScope = CoroutineScope(Dispatchers.IO)
 
-        dateSetListener = DatePickerDialog.OnDateSetListener {
-            _, year, month, dayOfMonth ->
+        dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -72,11 +72,12 @@ class UpdateEventFragment : Fragment() {
 
         binding.editTextDateUpdateEvent.setOnClickListener {
             DatePickerDialog(
-                    requireActivity(),
-                    dateSetListener,
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)).show()
+                requireActivity(),
+                dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
         binding.textViewAddImageUpdateEvent.setOnClickListener {
@@ -100,8 +101,10 @@ class UpdateEventFragment : Fragment() {
     private fun addNewImageDialogBox() {
         val pictureDialog = AlertDialog.Builder(requireContext())
         pictureDialog.setTitle(getString(R.string.Picture_dialog_select_action))
-        val pictureDialogItems = arrayOf(getString(R.string.Picture_dialog_select_photo_from_gallery),
-                getString(R.string.Picture_dialog_capture_photo_from_camera))
+        val pictureDialogItems = arrayOf(
+            getString(R.string.Picture_dialog_select_photo_from_gallery),
+            getString(R.string.Picture_dialog_capture_photo_from_camera)
+        )
 
         pictureDialog.setItems(pictureDialogItems) { _, which ->
             when (which) {
@@ -127,13 +130,13 @@ class UpdateEventFragment : Fragment() {
         binding.toolbarUpdateEvent.setNavigationIcon(R.drawable.back_arrow_icon)
     }
 
-    private fun checkUserInputAndUpdateEvent(uiScope: CoroutineScope){
+    private fun checkUserInputAndUpdateEvent(uiScope: CoroutineScope) {
 
-       val updateTitle = binding.editTextTitleUpdateEvent.text.toString()
-       val updateDate = binding.editTextDateUpdateEvent.text.toString()
-       val updateDescription = binding.editTextDescriptionUpdateEvent.text.toString()
-       val updateLocation = binding.editTextLocationUpdateEvent.text.toString()
-       val updateImage = saveImageToInternalStorage.toString()
+        val updateTitle = binding.editTextTitleUpdateEvent.text.toString()
+        val updateDate = binding.editTextDateUpdateEvent.text.toString()
+        val updateDescription = binding.editTextDescriptionUpdateEvent.text.toString()
+        val updateLocation = binding.editTextLocationUpdateEvent.text.toString()
+        val updateImage = saveImageToInternalStorage.toString()
 
         when {
             binding.editTextTitleUpdateEvent.text.isNullOrEmpty() -> {
@@ -145,17 +148,17 @@ class UpdateEventFragment : Fragment() {
             }
             binding.editTextLocationUpdateEvent.text.isNullOrEmpty() -> {
                 Toast.makeText(requireContext(), "Please enter a location", Toast.LENGTH_SHORT)
-                        .show()
+                    .show()
             }
             else -> {
                 uiScope.launch {
                     val updatedEvent = Event(
-                            args.currentEvent.eventId,
-                            updateTitle,
-                            updateImage,
-                            updateDescription,
-                            updateDate,
-                            updateLocation,
+                        args.currentEvent.eventId,
+                        updateTitle,
+                        updateImage,
+                        updateDescription,
+                        updateDate,
+                        updateLocation,
                     )
                     update(updatedEvent)
                 }
@@ -166,7 +169,7 @@ class UpdateEventFragment : Fragment() {
     }
 
     private suspend fun update(event: Event) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             database.updateEvent(event)
         }
     }
@@ -177,9 +180,11 @@ class UpdateEventFragment : Fragment() {
     }
 
     private fun choosePhotoFromGallery() {
-         val galleryIntent = Intent(Intent.ACTION_PICK,
-                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-         startActivityForResult(galleryIntent, AddNewEventFragment.GALLERY)
+        val galleryIntent = Intent(
+            Intent.ACTION_PICK,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
+        startActivityForResult(galleryIntent, AddNewEventFragment.GALLERY)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -191,12 +196,19 @@ class UpdateEventFragment : Fragment() {
                     contentURI?.let {
                         if (Build.VERSION.SDK_INT < 28) {
                             val selectedImageBitmap = MediaStore.Images.Media.getBitmap(
-                                    requireActivity().contentResolver, contentURI)
-                            saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap)
-                            binding.imageViewPlaceImageUpdateEvent.setImageBitmap(selectedImageBitmap)
+                                requireActivity().contentResolver, contentURI
+                            )
+                            saveImageToInternalStorage =
+                                saveImageToInternalStorage(selectedImageBitmap)
+                            binding.imageViewPlaceImageUpdateEvent.setImageBitmap(
+                                selectedImageBitmap
+                            )
 
                         } else {
-                            val source = ImageDecoder.createSource(requireActivity().contentResolver, contentURI)
+                            val source = ImageDecoder.createSource(
+                                requireActivity().contentResolver,
+                                contentURI
+                            )
                             val bitmap = ImageDecoder.decodeBitmap(source)
                             saveImageToInternalStorage = saveImageToInternalStorage(bitmap)
                             binding.imageViewPlaceImageUpdateEvent.setImageBitmap(bitmap)
@@ -204,7 +216,8 @@ class UpdateEventFragment : Fragment() {
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
-                    Toast.makeText(requireContext(), "Failed to load the image", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to load the image", Toast.LENGTH_SHORT)
+                        .show()
                 }
             } else if (requestCode == AddNewEventFragment.CAMERA && data != null) {
                 val photoFromCamera: Bitmap = data.extras?.get("data") as Bitmap
@@ -214,19 +227,24 @@ class UpdateEventFragment : Fragment() {
         }
     }
 
-    private fun saveImageToInternalStorage(bitmap: Bitmap): Uri{
+    private fun saveImageToInternalStorage(bitmap: Bitmap): Uri {
         val wrapper = ContextWrapper(activity?.applicationContext)
         var file = wrapper.getDir(AddNewEventFragment.IMAGE_DIRECTORY, Context.MODE_PRIVATE)
         file = File(file, "${UUID.randomUUID()}.jpg")
 
         try {
             val stream: OutputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100, stream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             stream.flush()
             stream.close()
-        }catch (e: IOException){
+        } catch (e: IOException) {
             e.printStackTrace()
         }
         return Uri.parse(file.absolutePath)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

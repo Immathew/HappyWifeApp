@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
@@ -16,15 +15,16 @@ import com.example.happywifeapp.databinding.FragmentEventDetailsBinding
 
 class EventDetailsFragment : Fragment() {
 
-    private lateinit var binding: FragmentEventDetailsBinding
+    private var _binding: FragmentEventDetailsBinding? = null
+    private val binding get() = _binding!!
+
     private val args by navArgs<EventDetailsFragmentArgs>()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?,
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_details, container, false)
-
+        _binding = FragmentEventDetailsBinding.inflate(inflater, container, false)
 
         val bitmapFactory = BitmapFactory.decodeFile(args.currentEvent.image)
         val scaleBitmap = Bitmap.createScaledBitmap(bitmapFactory, (bitmapFactory.width *0.9).toInt(), (bitmapFactory.height *0.9).toInt(), true)
@@ -34,7 +34,6 @@ class EventDetailsFragment : Fragment() {
         binding.eventDetailsLocation.text = args.currentEvent.location
 
         setupToolbar()
-
 
         return binding.root
     }
@@ -46,4 +45,8 @@ class EventDetailsFragment : Fragment() {
         binding.toolbarEventDetails.setNavigationIcon(R.drawable.back_arrow_icon)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

@@ -20,7 +20,9 @@ import com.example.happywifeapp.adapters.UpcomingEventsAdapter
 
 class UpcomingEventsFragment : Fragment() {
 
-    private lateinit var binding: FragmentUpcomingEventsBinding
+    private var _binding: FragmentUpcomingEventsBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var dataSource: EventDatabaseDAO
     var toggleFabButton = false
 
@@ -28,8 +30,9 @@ class UpcomingEventsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-            binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_upcoming_events, container, false)
+        _binding = FragmentUpcomingEventsBinding.inflate(
+            inflater, container, false
+        )
 
         val application = requireNotNull(this.activity).application
 
@@ -38,7 +41,7 @@ class UpcomingEventsFragment : Fragment() {
         val viewModelFactory = UpcomingEventsViewModelFactory(dataSource, application)
 
         val upcomingEventsViewModel =
-                ViewModelProvider(this, viewModelFactory).get(UpcomingEventsViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(UpcomingEventsViewModel::class.java)
 
         setupToolbar()
 
@@ -53,11 +56,11 @@ class UpcomingEventsFragment : Fragment() {
             setupCorrectFab()
 
             if (!toggleFabButton) {
-                upcomingEventsViewModel.getEventsInThisMonth.observe(viewLifecycleOwner,  { event ->
+                upcomingEventsViewModel.getEventsInThisMonth.observe(viewLifecycleOwner, { event ->
                     adapter.setData(event)
                 })
-            } else if (toggleFabButton){
-                upcomingEventsViewModel.getEventInNextMonth.observe(viewLifecycleOwner,  { event ->
+            } else if (toggleFabButton) {
+                upcomingEventsViewModel.getEventInNextMonth.observe(viewLifecycleOwner, { event ->
                     adapter.setData(event)
                 })
             }
@@ -73,7 +76,7 @@ class UpcomingEventsFragment : Fragment() {
         if (!toggleFabButton) {
             toggleFabButton = true
             binding.textInFab.text = getString(R.string.see_previous_month)
-        } else if (toggleFabButton){
+        } else if (toggleFabButton) {
             toggleFabButton = false
             binding.textInFab.text = getString(R.string.see_next_month)
         }
@@ -84,5 +87,10 @@ class UpcomingEventsFragment : Fragment() {
         binding.toolbarUpcomingEventsList.setupWithNavController(navController)
         binding.toolbarUpcomingEventsList.title = getString(R.string.upcoming_events)
         binding.toolbarUpcomingEventsList.setNavigationIcon(R.drawable.back_arrow_icon)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
