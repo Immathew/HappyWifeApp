@@ -11,10 +11,10 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="283dp"
+            android:layout_height="230dp"
             android:contentDescription="image of happy wife"
-            android:scaleType="fitXY"
-            android:src="@drawable/happy_wife_main_picture" />
+            android:src="@drawable/happy_wife_main_picture"
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:id="@+id/ll_upcoming_events"

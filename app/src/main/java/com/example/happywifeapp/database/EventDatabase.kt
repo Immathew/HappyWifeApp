@@ -10,23 +10,23 @@ abstract class EventDatabase : RoomDatabase() {
 
     abstract fun eventDatabaseDAO(): EventDatabaseDAO
 
-    companion object{
+    companion object {
 
         @Volatile
-         var INSTANCE: EventDatabase? = null
+        var INSTANCE: EventDatabase? = null
 
-        fun getInstance(context: Context) : EventDatabase {
+        fun getInstance(context: Context): EventDatabase {
             synchronized(this) {
-                var instance= INSTANCE
+                var instance = INSTANCE
 
                 if (instance == null) {
                     instance = Room.databaseBuilder(
-                            context.applicationContext,
-                            EventDatabase::class.java,
-                            "event_history_database"
+                        context.applicationContext,
+                        EventDatabase::class.java,
+                        "event_history_database"
                     )
-                            .fallbackToDestructiveMigration()
-                            .build()
+                        .fallbackToDestructiveMigration()
+                        .build()
                     INSTANCE = instance
                 }
 

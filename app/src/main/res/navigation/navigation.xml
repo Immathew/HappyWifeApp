@@ -37,6 +37,9 @@
             android:id="@+id/action_allEventsListFragment_to_updateEventFragment"
             app:destination="@id/updateEventFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_allEventsListFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/upcomingEventsFragment"

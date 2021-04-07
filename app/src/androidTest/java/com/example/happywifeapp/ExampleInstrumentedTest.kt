@@ -40,7 +40,7 @@ class ExampleInstrumentedTest {
             // Allowing main thread queries, just for testing.
             .allowMainThreadQueries()
             .build()
-        eventDao = db.eventDatabaseDAO
+        eventDao = db.eventDatabaseDAO()
     }
 
     @After
@@ -51,9 +51,9 @@ class ExampleInstrumentedTest {
 
     @Test
     @Throws(Exception::class)
-    fun insertAndGetEvent() {
+    suspend fun insertAndGetEvent() {
         val event = Event(1, "nowy","12381273617.jpg", "opis",
-            "01-02-2020", "poz", 1.0, 1.0)
+            "01-02-2020", "poz")
         eventDao.insertEvent(event)
 
         val newestEvent = eventDao.getEvent(1)

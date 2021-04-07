@@ -51,17 +51,18 @@ class AddNewEventFragment : Fragment() {
     private var saveImageToInternalStorage: Uri? = null
 
     companion object {
-         const val GALLERY = 1
-         const val CAMERA = 2
-         const val IMAGE_DIRECTORY = "HappyPlacesImages"
+        const val GALLERY = 1
+        const val CAMERA = 2
+        const val IMAGE_DIRECTORY = "HappyPlacesImages"
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?,
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_add_new_event, container, false)
+            inflater, R.layout.fragment_add_new_event, container, false
+        )
 
         setupToolbar(_binding)
 
@@ -71,8 +72,7 @@ class AddNewEventFragment : Fragment() {
 
         val uiScope = CoroutineScope(Dispatchers.IO)
 
-        dateSetListener = DatePickerDialog.OnDateSetListener {
-            _, year, month, dayOfMonth ->
+        dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -83,11 +83,12 @@ class AddNewEventFragment : Fragment() {
 
         _binding.editTextDate.setOnClickListener {
             DatePickerDialog(
-                    requireActivity(),
-                    dateSetListener,
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)).show()
+                requireActivity(),
+                dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
         _binding.textViewAddImage.setOnClickListener {
@@ -142,7 +143,7 @@ class AddNewEventFragment : Fragment() {
     }
 
     private suspend fun insert(event: Event) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             database.insertEvent(event)
         }
 
@@ -151,8 +152,10 @@ class AddNewEventFragment : Fragment() {
     private fun addNewImageDialogBox() {
         val pictureDialog = AlertDialog.Builder(requireContext())
         pictureDialog.setTitle(getString(R.string.Picture_dialog_select_action))
-        val pictureDialogItems = arrayOf(getString(R.string.Picture_dialog_select_photo_from_gallery),
-                getString(R.string.Picture_dialog_capture_photo_from_camera))
+        val pictureDialogItems = arrayOf(
+            getString(R.string.Picture_dialog_select_photo_from_gallery),
+            getString(R.string.Picture_dialog_capture_photo_from_camera)
+        )
 
         pictureDialog.setItems(pictureDialogItems) { _, which ->
             when (which) {
@@ -179,26 +182,37 @@ class AddNewEventFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY && data != null) {
-               val contentURI = data.data
-               try {
-                   contentURI?.let {
-                       if (Build.VERSION.SDK_INT < 28) {
-                           val selectedImageBitmap = MediaStore.Images.Media.getBitmap(
-                               requireActivity().contentResolver, contentURI)
-                           saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap)
-                           _binding.imageViewPlaceImage.setImageBitmap(selectedImageBitmap)
+                val contentURI = data.data
+                try {
+                    contentURI?.let {
+                        if (Build.VERSION.SDK_INT < 28) {
+                            val selectedImageBitmap = MediaStore.Images.Media.getBitmap(
+                                requireActivity().contentResolver, contentURI
+                            )
+                            val scaleBitmap = Bitmap.createScaledBitmap(
+                                selectedImageBitmap,
+                                (selectedImageBitmap.width * 0.9).toInt(),
+                                (selectedImageBitmap.height * 0.9).toInt(),
+                                true
+                            )
+                            saveImageToInternalStorage = saveImageToInternalStorage(scaleBitmap)
+                            _binding.imageViewPlaceImage.setImageBitmap(scaleBitmap)
 
-                       } else {
-                           val source = ImageDecoder.createSource(requireActivity().contentResolver, contentURI)
-                           val bitmap = ImageDecoder.decodeBitmap(source)
-                           saveImageToInternalStorage = saveImageToInternalStorage(bitmap)
-                           _binding.imageViewPlaceImage.setImageBitmap(bitmap)
-                       }
-                   }
-               } catch (e: IOException) {
-                   e.printStackTrace()
-                   Toast.makeText(requireContext(), "Failed to load the image", Toast.LENGTH_SHORT).show()
-               }
+                        } else {
+                            val source = ImageDecoder.createSource(
+                                requireActivity().contentResolver,
+                                contentURI
+                            )
+                            val bitmap = ImageDecoder.decodeBitmap(source)
+                            saveImageToInternalStorage = saveImageToInternalStorage(bitmap)
+                            _binding.imageViewPlaceImage.setImageBitmap(bitmap)
+                        }
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    Toast.makeText(requireContext(), "Failed to load the image", Toast.LENGTH_SHORT)
+                        .show()
+                }
             } else if (requestCode == CAMERA && data != null) {
                 val photoFromCamera: Bitmap = data.extras?.get("data") as Bitmap
                 saveImageToInternalStorage = saveImageToInternalStorage(photoFromCamera)
@@ -212,7 +226,7 @@ class AddNewEventFragment : Fragment() {
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.CAMERA
-        ).withListener(object: MultiplePermissionsListener {
+        ).withListener(object : MultiplePermissionsListener {
 
             override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
 
@@ -224,7 +238,8 @@ class AddNewEventFragment : Fragment() {
 
             override fun onPermissionRationaleShouldBeShown(
                 permissions: MutableList<PermissionRequest>,
-                token: PermissionToken) {
+                token: PermissionToken
+            ) {
 
                 showRationDialogForPermissions()
             }
@@ -235,56 +250,61 @@ class AddNewEventFragment : Fragment() {
         Dexter.withActivity(requireActivity()).withPermissions(
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ).withListener(object: MultiplePermissionsListener {
+        ).withListener(object : MultiplePermissionsListener {
 
             override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
 
                 if (report!!.areAllPermissionsGranted()) {
-                    val galleryIntent = Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    val galleryIntent = Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
                     startActivityForResult(galleryIntent, GALLERY)
                 }
             }
 
             override fun onPermissionRationaleShouldBeShown(
-                    permissions: MutableList<PermissionRequest>,
-                    token: PermissionToken) {
-                
+                permissions: MutableList<PermissionRequest>,
+                token: PermissionToken
+            ) {
+
                 showRationDialogForPermissions()
             }
         }).onSameThread().check()
     }
 
     private fun showRationDialogForPermissions() {
-        AlertDialog.Builder(requireContext()).setMessage("Looks like you have turned off permission " +
-                    "required. It can be enabled under the Application Settings")
-                .setPositiveButton("Go to settings") { _,_ ->
-                        try {
-                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                            val uri = Uri.fromParts("package", activity?.packageName, null)
-                            intent.data = uri
-                            startActivity(intent)
+        AlertDialog.Builder(requireContext()).setMessage(
+            "Looks like you have turned off permission " +
+                    "required. It can be enabled under the Application Settings"
+        )
+            .setPositiveButton("Go to settings") { _, _ ->
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", activity?.packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
 
-                        } catch (e: ActivityNotFoundException) {
-                            e.printStackTrace()
-                        }
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
                 }
-                .setNegativeButton("Cancel") {dialog, _->
-                    dialog.dismiss()
-                }.show()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
     }
 
-    private fun saveImageToInternalStorage(bitmap: Bitmap): Uri{
+    private fun saveImageToInternalStorage(bitmap: Bitmap): Uri {
         val wrapper = ContextWrapper(activity?.applicationContext)
         var file = wrapper.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
         file = File(file, "${UUID.randomUUID()}.jpg")
 
         try {
             val stream: OutputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100, stream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             stream.flush()
             stream.close()
-        }catch (e: IOException){
+        } catch (e: IOException) {
             e.printStackTrace()
         }
         return Uri.parse(file.absolutePath)

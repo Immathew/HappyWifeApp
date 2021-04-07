@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import java.util.*
 
 
-class EventRepository(eventDao: EventDatabaseDAO) {
+class EventRepository(private val eventDao: EventDatabaseDAO) {
 
     private var calendar = Calendar.getInstance()
 
@@ -15,7 +15,9 @@ class EventRepository(eventDao: EventDatabaseDAO) {
 
     private val nextMonth = setupCorrectMonthForDatabase(getNextMonth)
 
-    val readAllData: LiveData<List<Event>> = eventDao.getAllEvents()
+    fun readAllData(): LiveData<List<Event>> {
+         return eventDao.getAllEvents()
+    }
 
     val readThisMonthEvents: LiveData<List<Event>> = eventDao.getAllEventsInThisMonth(currentMonth)
 

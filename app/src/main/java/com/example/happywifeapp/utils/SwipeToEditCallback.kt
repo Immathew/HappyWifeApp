@@ -19,7 +19,7 @@ abstract class SwipeToEditCallback(context: Context) : ItemTouchHelper.SimpleCal
     private val intrinsicWidth = editIcon!!.intrinsicWidth
     private val intrinsicHeight = editIcon!!.intrinsicHeight
     private val background = ColorDrawable()
-    private val backgroundColor = Color.parseColor("#62a34f")
+    private val backgroundColor = ContextCompat.getColor(context, R.color.green)
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }
 
 
@@ -53,7 +53,7 @@ abstract class SwipeToEditCallback(context: Context) : ItemTouchHelper.SimpleCal
             return
         }
 
-        // Draw the green delete background
+        // Draw the green edit background
         background.color = backgroundColor
         background.setBounds(itemView.left + dX.toInt(), itemView.top, itemView.left, itemView.bottom)
         background.draw(c)

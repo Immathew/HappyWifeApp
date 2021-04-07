@@ -1,23 +1,15 @@
 package com.example.happywifeapp.allEvents
 
-
-import android.net.Uri
-import android.text.Layout
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.example.happywifeapp.R
 import com.example.happywifeapp.database.Event
-import com.example.happywifeapp.upcomingEvents.UpcomingEventsFragmentDirections
+import com.example.happywifeapp.databinding.ItemEventBinding
 
 
-class EventsAdapter(): RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
+class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
 
     private var data = emptyList<Event>()
 
@@ -25,30 +17,39 @@ class EventsAdapter(): RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
         return data.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_event, parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        return MyViewHolder.from(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = data[position]
 
-        holder.eventTitle.text = item.title
-        holder.eventDescription.text = item.description
-        holder.eventDate.text = item.date
-        holder.eventImage.setImageURI(Uri.parse(item.image))
+
+
+        holder.itemView.setOnClickListener {
+            val action = AllEventsListFragmentDirections.actionAllEventsListFragmentToEventDetailsFragment(item)
+            Navigation.findNavController(holder.itemView).navigate(action)
+        }
+
+        holder.bind(item)
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val eventTitle: TextView = itemView.findViewById(R.id.item_view_title)
-        val eventDescription: TextView = itemView.findViewById(R.id.item_view_description)
-        val eventDate: TextView = itemView.findViewById(R.id.item_view_date)
-        val eventImage: ImageView = itemView.findViewById(R.id.item_view_place_image)
+    class MyViewHolder(private val binding: ItemEventBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(event: Event) {
+            binding.event = event
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): MyViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemEventBinding.inflate(layoutInflater, parent, false)
+                return MyViewHolder(binding)
+            }
+        }
     }
-
-
 
     fun setData(event: List<Event>) {
         this.data = event
