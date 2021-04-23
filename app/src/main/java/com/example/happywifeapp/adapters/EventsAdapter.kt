@@ -25,8 +25,6 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = data[position]
 
-
-
         holder.itemView.setOnClickListener {
             val action =
                 AllEventsListFragmentDirections.actionAllEventsListFragmentToEventDetailsFragment(

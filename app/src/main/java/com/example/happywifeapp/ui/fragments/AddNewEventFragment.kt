@@ -188,8 +188,8 @@ class AddNewEventFragment : Fragment() {
                             )
                             val scaleBitmap = Bitmap.createScaledBitmap(
                                 selectedImageBitmap,
-                                (selectedImageBitmap.width * 0.9).toInt(),
-                                (selectedImageBitmap.height * 0.9).toInt(),
+                                (selectedImageBitmap.width * 0.95).toInt(),
+                                (selectedImageBitmap.height * 0.95).toInt(),
                                 true
                             )
                             saveImageToInternalStorage = saveImageToInternalStorage(scaleBitmap)

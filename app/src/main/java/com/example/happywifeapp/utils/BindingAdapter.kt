@@ -24,8 +24,8 @@ class BindingAdapter {
             val bitmapFactory = BitmapFactory.decodeFile(stringUri)
             val scaleBitmap = Bitmap.createScaledBitmap(
                 bitmapFactory,
-                (bitmapFactory.width * 0.9).toInt(),
-                (bitmapFactory.height * 0.9).toInt(),
+                (bitmapFactory.width * 0.95).toInt(),
+                (bitmapFactory.height * 0.95).toInt(),
                 true
             )
             imageView.setImageBitmap(scaleBitmap)

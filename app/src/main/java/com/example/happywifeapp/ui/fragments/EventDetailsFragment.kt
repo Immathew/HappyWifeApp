@@ -21,13 +21,18 @@ class EventDetailsFragment : Fragment() {
     private val args by navArgs<EventDetailsFragmentArgs>()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?,
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentEventDetailsBinding.inflate(inflater, container, false)
 
         val bitmapFactory = BitmapFactory.decodeFile(args.currentEvent.image)
-        val scaleBitmap = Bitmap.createScaledBitmap(bitmapFactory, (bitmapFactory.width *0.9).toInt(), (bitmapFactory.height *0.9).toInt(), true)
+        val scaleBitmap = Bitmap.createScaledBitmap(
+            bitmapFactory,
+            (bitmapFactory.width * 0.95).toInt(),
+            (bitmapFactory.height * 0.95).toInt(),
+            true
+        )
 
         binding.imageEventDetails.setImageBitmap(scaleBitmap)
         binding.eventDetailsDescription.text = args.currentEvent.description

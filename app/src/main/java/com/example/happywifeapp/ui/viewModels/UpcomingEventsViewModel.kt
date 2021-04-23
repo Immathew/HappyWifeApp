@@ -3,7 +3,6 @@ package com.example.happywifeapp.ui.viewModels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.database.EventDatabase
 import com.example.happywifeapp.database.EventDatabaseDAO
@@ -18,11 +17,20 @@ class UpcomingEventsViewModel(
 
      private val repository: EventRepository
 
+    var toggleFabButton = false
+
      init {
          val eventDao = EventDatabase.getInstance(application).eventDatabaseDAO()
          repository = EventRepository(eventDao)
-         getEventsInThisMonth = repository.readThisMonthEvents
-         getEventInNextMonth = repository.readNextMonthEvents
+         getEventsInThisMonth = repository.readThisMonthEvents()
+         getEventInNextMonth = repository.readNextMonthEvents()
      }
 
+    fun setupCorrectFab() {
+        if (!toggleFabButton) {
+            toggleFabButton = true
+        } else if (toggleFabButton) {
+            toggleFabButton = false
+        }
+    }
 }

@@ -38,7 +38,7 @@
                     android:id="@+id/image_event_details"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/detail_screen_image_height_size"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/detail_screen_image_placeholder"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

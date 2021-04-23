@@ -23,8 +23,23 @@ class UpcomingEventsFragment : Fragment() {
     private var _binding: FragmentUpcomingEventsBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var upcomingEventsViewModel: UpcomingEventsViewModel
+    private val adapter by lazy { UpcomingEventsAdapter() }
     private lateinit var dataSource: EventDatabaseDAO
-    var toggleFabButton = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val application = requireNotNull(this.activity).application
+
+        dataSource = EventDatabase.getInstance(application).eventDatabaseDAO()
+
+        val viewModelFactory = UpcomingEventsViewModelFactory(dataSource, application)
+
+        upcomingEventsViewModel =
+            ViewModelProvider(this, viewModelFactory).get(UpcomingEventsViewModel::class.java)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,32 +49,25 @@ class UpcomingEventsFragment : Fragment() {
             inflater, container, false
         )
 
-        val application = requireNotNull(this.activity).application
-
-        dataSource = EventDatabase.getInstance(application).eventDatabaseDAO()
-
-        val viewModelFactory = UpcomingEventsViewModelFactory(dataSource, application)
-
-        val upcomingEventsViewModel =
-            ViewModelProvider(this, viewModelFactory).get(UpcomingEventsViewModel::class.java)
-
         setupToolbar()
 
-        val adapter = UpcomingEventsAdapter()
         binding.recyclerViewUpcomingEventsList.adapter = adapter
 
         upcomingEventsViewModel.getEventsInThisMonth.observe(viewLifecycleOwner, { event ->
             adapter.setData(event)
+            upcomingEventsViewModel.toggleFabButton = false
         })
 
         binding.fabNextMonthButton.setOnClickListener {
-            setupCorrectFab()
+            upcomingEventsViewModel.setupCorrectFab()
 
-            if (!toggleFabButton) {
+            if (!upcomingEventsViewModel.toggleFabButton) {
+                binding.textInFab.text = getString(R.string.see_next_month)
                 upcomingEventsViewModel.getEventsInThisMonth.observe(viewLifecycleOwner, { event ->
                     adapter.setData(event)
                 })
-            } else if (toggleFabButton) {
+            } else if (upcomingEventsViewModel.toggleFabButton) {
+                binding.textInFab.text = getString(R.string.see_previous_month)
                 upcomingEventsViewModel.getEventInNextMonth.observe(viewLifecycleOwner, { event ->
                     adapter.setData(event)
                 })
@@ -70,16 +78,6 @@ class UpcomingEventsFragment : Fragment() {
         binding.lifecycleOwner = this
 
         return binding.root
-    }
-
-    private fun setupCorrectFab() {
-        if (!toggleFabButton) {
-            toggleFabButton = true
-            binding.textInFab.text = getString(R.string.see_previous_month)
-        } else if (toggleFabButton) {
-            toggleFabButton = false
-            binding.textInFab.text = getString(R.string.see_next_month)
-        }
     }
 
     private fun setupToolbar() {
