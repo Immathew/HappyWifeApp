@@ -288,7 +288,7 @@ class AddNewEventFragment : Fragment() {
 
         try {
             val stream: OutputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
             stream.flush()
             stream.close()
         } catch (e: IOException) {

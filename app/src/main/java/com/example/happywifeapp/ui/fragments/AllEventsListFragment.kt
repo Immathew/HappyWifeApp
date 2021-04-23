@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AllEventsListFragment : Fragment() {
 
-//    private lateinit var dataSource: EventDatabaseDAO
     private lateinit var allEventsListViewModel: AllEventsListViewModel
 
     private val mAdapter by lazy { EventsAdapter() }
@@ -36,12 +35,6 @@ class AllEventsListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        val application = requireNotNull(this.activity).application
-//
-//        dataSource = EventDatabase.getInstance(application).eventDatabaseDAO()
-//
-//        val viewModelFactory = AllEventsListViewModelFactory(dataSource, application)
 
         allEventsListViewModel =
             ViewModelProvider(requireActivity()).get(AllEventsListViewModel::class.java)

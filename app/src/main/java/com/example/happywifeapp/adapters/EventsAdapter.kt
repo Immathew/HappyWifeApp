@@ -12,10 +12,10 @@ import com.example.happywifeapp.ui.fragments.AllEventsListFragmentDirections
 
 class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
 
-    private var data = emptyList<Event>()
+    private var allEventsList = emptyList<Event>()
 
     override fun getItemCount(): Int {
-        return data.size
+        return allEventsList.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -23,7 +23,7 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val item = data[position]
+        val item = allEventsList[position]
 
         holder.itemView.setOnClickListener {
             val action =
@@ -54,17 +54,17 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
     }
 
     fun setData(event: List<Event>) {
-        this.data = event
+        this.allEventsList = event
         notifyDataSetChanged()
     }
 
     fun editAt(position: Int): NavDirections {
-        val item = data[position]
+        val item = allEventsList[position]
         return AllEventsListFragmentDirections.actionAllEventsListFragmentToUpdateEventFragment(item)
     }
 
     fun removeAt(position: Int): Int {
-        val item = data[position]
+        val item = allEventsList[position]
         return item.eventId
     }
 

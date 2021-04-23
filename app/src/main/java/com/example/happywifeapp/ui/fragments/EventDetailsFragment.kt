@@ -1,7 +1,5 @@
 package com.example.happywifeapp.ui.fragments
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
 import com.example.happywifeapp.R
 import com.example.happywifeapp.databinding.FragmentEventDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,21 +27,19 @@ class EventDetailsFragment : Fragment() {
     ): View {
         _binding = FragmentEventDetailsBinding.inflate(inflater, container, false)
 
-        val bitmapFactory = BitmapFactory.decodeFile(args.currentEvent.image)
-        val scaleBitmap = Bitmap.createScaledBitmap(
-            bitmapFactory,
-            (bitmapFactory.width * 0.95).toInt(),
-            (bitmapFactory.height * 0.95).toInt(),
-            true
-        )
-
-        binding.imageEventDetails.setImageBitmap(scaleBitmap)
+        loadImageWithGlide()
         binding.eventDetailsDescription.text = args.currentEvent.description
         binding.eventDetailsLocation.text = args.currentEvent.location
 
         setupToolbar()
 
         return binding.root
+    }
+
+    private fun loadImageWithGlide() {
+        Glide.with(requireActivity())
+            .load(args.currentEvent.image)
+            .into(binding.imageEventDetails)
     }
 
     private fun setupToolbar() {

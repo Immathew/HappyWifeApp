@@ -16,11 +16,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
 import com.example.happywifeapp.R
 import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.databinding.FragmentUpdateEventBinding
@@ -166,7 +168,6 @@ class UpdateEventFragment : Fragment() {
         }
     }
 
-
     private fun takePhotoFromCamera() {
         val galleryIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(galleryIntent, AddNewEventFragment.CAMERA)
@@ -193,9 +194,7 @@ class UpdateEventFragment : Fragment() {
                             )
                             saveImageToInternalStorage =
                                 saveImageToInternalStorage(selectedImageBitmap)
-                            binding.imageViewPlaceImageUpdateEvent.setImageBitmap(
-                                selectedImageBitmap
-                            )
+                            loadImageWithGlide(binding.imageViewPlaceImageUpdateEvent, selectedImageBitmap)
 
                         } else {
                             val source = ImageDecoder.createSource(
@@ -204,7 +203,7 @@ class UpdateEventFragment : Fragment() {
                             )
                             val bitmap = ImageDecoder.decodeBitmap(source)
                             saveImageToInternalStorage = saveImageToInternalStorage(bitmap)
-                            binding.imageViewPlaceImageUpdateEvent.setImageBitmap(bitmap)
+                            loadImageWithGlide(binding.imageViewPlaceImageUpdateEvent, bitmap)
                         }
                     }
                 } catch (e: IOException) {
@@ -215,7 +214,7 @@ class UpdateEventFragment : Fragment() {
             } else if (requestCode == AddNewEventFragment.CAMERA && data != null) {
                 val photoFromCamera: Bitmap = data.extras?.get("data") as Bitmap
                 saveImageToInternalStorage = saveImageToInternalStorage(photoFromCamera)
-                binding.imageViewPlaceImageUpdateEvent.setImageBitmap(photoFromCamera)
+                loadImageWithGlide(binding.imageViewPlaceImageUpdateEvent, photoFromCamera)
             }
         }
     }
@@ -227,7 +226,7 @@ class UpdateEventFragment : Fragment() {
 
         try {
             val stream: OutputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
             stream.flush()
             stream.close()
         } catch (e: IOException) {
@@ -239,5 +238,11 @@ class UpdateEventFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun loadImageWithGlide(imageView: ImageView, bitmap: Bitmap) {
+        Glide.with(requireActivity())
+            .load(bitmap)
+            .into(imageView)
     }
 }
