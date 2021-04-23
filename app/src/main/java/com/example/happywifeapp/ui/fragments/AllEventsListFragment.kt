@@ -31,9 +31,23 @@ import kotlinx.coroutines.withContext
 class AllEventsListFragment : Fragment() {
 
     private lateinit var dataSource: EventDatabaseDAO
+    private lateinit var allEventsListViewModel: AllEventsListViewModel
 
     private var _binding: FragmentAllEventsListBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val application = requireNotNull(this.activity).application
+
+        dataSource = EventDatabase.getInstance(application).eventDatabaseDAO()
+
+        val viewModelFactory = AllEventsListViewModelFactory(dataSource, application)
+
+        allEventsListViewModel =
+            ViewModelProvider(this, viewModelFactory).get(AllEventsListViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,16 +57,7 @@ class AllEventsListFragment : Fragment() {
             inflater, container, false
         )
 
-        val application = requireNotNull(this.activity).application
-
-        dataSource = EventDatabase.getInstance(application).eventDatabaseDAO()
-
-        val viewModelFactory = AllEventsListViewModelFactory(dataSource, application)
-
         val uiScope = CoroutineScope(Dispatchers.IO)
-
-        val allEventsListViewModel =
-            ViewModelProvider(this, viewModelFactory).get(AllEventsListViewModel::class.java)
 
         setupToolbar(binding)
         binding.allEventsListViewModel = allEventsListViewModel

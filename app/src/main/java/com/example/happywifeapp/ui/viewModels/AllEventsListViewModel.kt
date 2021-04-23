@@ -18,7 +18,6 @@ class AllEventsListViewModel(
 
     private val repository: EventRepository
 
-
     init {
         val eventDao = EventDatabase.getInstance(application).eventDatabaseDAO()
         repository = EventRepository(eventDao)

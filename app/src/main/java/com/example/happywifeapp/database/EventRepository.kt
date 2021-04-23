@@ -15,9 +15,7 @@ class EventRepository(private val eventDao: EventDatabaseDAO) {
 
     private val nextMonth = setupCorrectMonthForDatabase(getNextMonth)
 
-    fun readAllData(): LiveData<List<Event>> {
-         return eventDao.getAllEvents()
-    }
+    fun readAllData(): LiveData<List<Event>> = eventDao.getAllEvents()
 
     fun readThisMonthEvents(): LiveData<List<Event>> = eventDao.getAllEventsInThisMonth(currentMonth)
 
