@@ -4,27 +4,20 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.happywifeapp.database.Event
-import com.example.happywifeapp.database.EventDatabase
-import com.example.happywifeapp.database.EventDatabaseDAO
 import com.example.happywifeapp.database.EventRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class UpcomingEventsViewModel(
-        val database: EventDatabaseDAO,
-        application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class UpcomingEventsViewModel @Inject constructor(
+    private val repository: EventRepository,
+    application: Application
+) : AndroidViewModel(application) {
 
-     val getEventsInThisMonth: LiveData<List<Event>>
-     val getEventInNextMonth: LiveData<List<Event>>
-
-     private val repository: EventRepository
+    val getEventsInThisMonth: LiveData<List<Event>> = repository.readThisMonthEvents()
+    val getEventInNextMonth: LiveData<List<Event>> = repository.readNextMonthEvents()
 
     var toggleFabButton = false
-
-     init {
-         val eventDao = EventDatabase.getInstance(application).eventDatabaseDAO()
-         repository = EventRepository(eventDao)
-         getEventsInThisMonth = repository.readThisMonthEvents()
-         getEventInNextMonth = repository.readNextMonthEvents()
-     }
 
     fun setupCorrectFab() {
         if (!toggleFabButton) {

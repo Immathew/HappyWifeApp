@@ -10,10 +10,10 @@ interface EventDatabaseDAO {
     suspend fun insertEvent (event: Event)
 
     @Update
-    fun updateEvent(event: Event)
+    suspend fun updateEvent(event: Event)
 
     @Delete
-    fun deleteEvent(event: Event)
+    suspend fun deleteEvent(event: Event)
 
     @Query("SELECT * FROM events_to_remember_table WHERE date LIKE '%' ||  :currentMonth  || '%' ORDER BY date ASC")
     fun getAllEventsInThisMonth(currentMonth: String): LiveData<List<Event>>

@@ -9,8 +9,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import com.example.happywifeapp.R
 import com.example.happywifeapp.databinding.FragmentTitleBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class TitleFragment : Fragment() {
 
     override fun onCreateView(

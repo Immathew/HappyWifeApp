@@ -2,15 +2,8 @@ package com.example.happywifeapp.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import coil.load
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.net.URI
 
 class BindingAdapter {
 

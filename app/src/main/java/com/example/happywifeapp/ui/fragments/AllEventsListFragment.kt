@@ -15,38 +15,36 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.happywifeapp.R
 import com.example.happywifeapp.adapters.EventsAdapter
-import com.example.happywifeapp.database.Event
-import com.example.happywifeapp.database.EventDatabase
-import com.example.happywifeapp.database.EventDatabaseDAO
 import com.example.happywifeapp.databinding.FragmentAllEventsListBinding
 import com.example.happywifeapp.ui.viewModels.AllEventsListViewModel
-import com.example.happywifeapp.ui.viewModels.AllEventsListViewModelFactory
 import com.example.happywifeapp.utils.SwipeToDeleteCallback
 import com.example.happywifeapp.utils.SwipeToEditCallback
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class AllEventsListFragment : Fragment() {
 
-    private lateinit var dataSource: EventDatabaseDAO
+//    private lateinit var dataSource: EventDatabaseDAO
     private lateinit var allEventsListViewModel: AllEventsListViewModel
 
+    private val mAdapter by lazy { EventsAdapter() }
     private var _binding: FragmentAllEventsListBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val application = requireNotNull(this.activity).application
-
-        dataSource = EventDatabase.getInstance(application).eventDatabaseDAO()
-
-        val viewModelFactory = AllEventsListViewModelFactory(dataSource, application)
+//        val application = requireNotNull(this.activity).application
+//
+//        dataSource = EventDatabase.getInstance(application).eventDatabaseDAO()
+//
+//        val viewModelFactory = AllEventsListViewModelFactory(dataSource, application)
 
         allEventsListViewModel =
-            ViewModelProvider(this, viewModelFactory).get(AllEventsListViewModel::class.java)
+            ViewModelProvider(requireActivity()).get(AllEventsListViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -63,8 +61,7 @@ class AllEventsListFragment : Fragment() {
         binding.allEventsListViewModel = allEventsListViewModel
         binding.lifecycleOwner = this
 
-        val adapter = EventsAdapter()
-        binding.recyclerViewEventList.adapter = adapter
+        binding.recyclerViewEventList.adapter = mAdapter
 
         //Edit objects
         val editSwipeHandler = object : SwipeToEditCallback(requireContext()) {
@@ -85,8 +82,8 @@ class AllEventsListFragment : Fragment() {
                 val selectedEventPosition = adapter.removeAt(viewHolder.adapterPosition)
 
                 uiScope.launch {
-                    val eventToDelete = dataSource.getEvent(selectedEventPosition)
-                    delete(eventToDelete)
+                    val eventToDelete = allEventsListViewModel.getEvent(selectedEventPosition)
+                    allEventsListViewModel.deleteEvent(eventToDelete)
                 }
                 Toast.makeText(requireContext(), "Event deleted", Toast.LENGTH_SHORT).show()
             }
@@ -96,7 +93,7 @@ class AllEventsListFragment : Fragment() {
 
         lifecycleScope.launch {
             allEventsListViewModel.readAllData.observe(viewLifecycleOwner, Observer { event ->
-                adapter.setData(event)
+                mAdapter.setData(event)
 
             })
         }
@@ -111,11 +108,6 @@ class AllEventsListFragment : Fragment() {
         binding.toolbarAllEventsList.setNavigationIcon(R.drawable.back_arrow_icon)
     }
 
-    private suspend fun delete(event: Event) {
-        withContext(Dispatchers.IO) {
-            dataSource.deleteEvent(event)
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

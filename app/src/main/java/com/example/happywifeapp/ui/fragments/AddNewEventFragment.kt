@@ -19,19 +19,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.happywifeapp.R
 import com.example.happywifeapp.database.Event
-import com.example.happywifeapp.database.EventDatabase
-import com.example.happywifeapp.database.EventDatabaseDAO
 import com.example.happywifeapp.databinding.FragmentAddNewEventBinding
+import com.example.happywifeapp.ui.viewModels.AddNewEventViewModel
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import kotlinx.coroutines.*
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -39,13 +39,14 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+@AndroidEntryPoint
 class AddNewEventFragment : Fragment() {
 
     private var _binding: FragmentAddNewEventBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var database: EventDatabaseDAO
+    private lateinit var addNewEventViewModel: AddNewEventViewModel
+
     private var calendar = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     private var saveImageToInternalStorage: Uri? = null
@@ -56,19 +57,19 @@ class AddNewEventFragment : Fragment() {
         const val IMAGE_DIRECTORY = "HappyPlacesImages"
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        addNewEventViewModel =
+            ViewModelProvider(requireActivity()).get(AddNewEventViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAddNewEventBinding.inflate(inflater, container, false)
 
-        setupToolbar(binding)
-
-        val application = requireNotNull(this.activity).application
-
-        database = EventDatabase.getInstance(application).eventDatabaseDAO()
-
-        val uiScope = CoroutineScope(Dispatchers.IO)
+        setupToolbar()
 
         dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
@@ -94,14 +95,14 @@ class AddNewEventFragment : Fragment() {
         }
 
         binding.addNewEventButtonSave.setOnClickListener {
-            checksUsersInputAndSaveEventToDatabase(uiScope)
+            checksUsersInputAndSaveEventToDatabase()
         }
 
         return binding.root
 
     }
 
-    private fun checksUsersInputAndSaveEventToDatabase(uiScope: CoroutineScope) {
+    private fun checksUsersInputAndSaveEventToDatabase() {
         when {
             binding.editTextTitle.text.isNullOrEmpty() -> {
                 Toast.makeText(requireContext(), "Please enter title", Toast.LENGTH_SHORT).show()
@@ -118,32 +119,21 @@ class AddNewEventFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please select a image", Toast.LENGTH_SHORT).show()
             }
             else -> {
+                val newEvent = Event(
+                    0,
+                    binding.editTextTitle.text.toString(),
+                    saveImageToInternalStorage.toString(),
+                    binding.editTextDescription.text.toString(),
+                    binding.editTextDate.text.toString(),
+                    binding.editTextLocation.text.toString(),
+                )
+                addNewEventViewModel.insertNewEvent(newEvent)
 
-                uiScope.launch {
-                    val newEvent = Event(
-                        0,
-                        binding.editTextTitle.text.toString(),
-                        saveImageToInternalStorage.toString(),
-                        binding.editTextDescription.text.toString(),
-                        binding.editTextDate.text.toString(),
-                        binding.editTextLocation.text.toString(),
-                    )
-                    insert(newEvent)
-                }
+                Toast.makeText(requireContext(), "Event added", Toast.LENGTH_SHORT).show()
+
                 findNavController().popBackStack()
-
-                if (EventDatabase.INSTANCE != null) {
-                    Toast.makeText(requireContext(), "Event added", Toast.LENGTH_SHORT).show()
-                }
             }
         }
-    }
-
-    private suspend fun insert(event: Event) {
-        withContext(Dispatchers.IO) {
-            database.insertEvent(event)
-        }
-
     }
 
     private fun addNewImageDialogBox() {
@@ -162,7 +152,7 @@ class AddNewEventFragment : Fragment() {
         }.show()
     }
 
-    private fun setupToolbar(binding: FragmentAddNewEventBinding) {
+    private fun setupToolbar() {
         val navController = findNavController()
         binding.toolbarAddNewEvent.setupWithNavController(navController)
         binding.toolbarAddNewEvent.title = getString(R.string.add_new_event)

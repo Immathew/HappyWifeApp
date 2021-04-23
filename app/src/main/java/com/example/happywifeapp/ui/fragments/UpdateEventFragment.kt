@@ -17,19 +17,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import com.example.happywifeapp.R
 import com.example.happywifeapp.database.Event
-import com.example.happywifeapp.database.EventDatabase
-import com.example.happywifeapp.database.EventDatabaseDAO
 import com.example.happywifeapp.databinding.FragmentUpdateEventBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.happywifeapp.ui.viewModels.UpdateEventViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -37,16 +33,25 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
+@AndroidEntryPoint
 class UpdateEventFragment : Fragment() {
 
     private var _binding: FragmentUpdateEventBinding? = null
     private val binding get() = _binding!!
 
     private val args by navArgs<UpdateEventFragmentArgs>()
-    private lateinit var database: EventDatabaseDAO
+    private lateinit var updateEventViewModel: UpdateEventViewModel
+
     private var calendar = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     private lateinit var saveImageToInternalStorage: Uri
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        updateEventViewModel =
+            ViewModelProvider(requireActivity()).get(UpdateEventViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,11 +62,6 @@ class UpdateEventFragment : Fragment() {
         setupToolbar()
         populateTextFieldsFromArgs()
         saveImageToInternalStorage = Uri.parse(args.currentEvent.image)
-
-        val application = requireNotNull(this.activity).application
-        database = EventDatabase.getInstance(application).eventDatabaseDAO()
-
-        val uiScope = CoroutineScope(Dispatchers.IO)
 
         dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
@@ -85,7 +85,7 @@ class UpdateEventFragment : Fragment() {
         }
 
         binding.updateEventButton.setOnClickListener {
-            checkUserInputAndUpdateEvent(uiScope)
+            checkUserInputAndUpdateEvent()
             findNavController().popBackStack()
         }
 
@@ -114,7 +114,6 @@ class UpdateEventFragment : Fragment() {
         }.show()
     }
 
-
     private fun populateTextFieldsFromArgs() {
         binding.editTextTitleUpdateEvent.setText(args.currentEvent.title)
         binding.editTextDateUpdateEvent.setText(args.currentEvent.date)
@@ -130,7 +129,7 @@ class UpdateEventFragment : Fragment() {
         binding.toolbarUpdateEvent.setNavigationIcon(R.drawable.back_arrow_icon)
     }
 
-    private fun checkUserInputAndUpdateEvent(uiScope: CoroutineScope) {
+    private fun checkUserInputAndUpdateEvent() {
 
         val updateTitle = binding.editTextTitleUpdateEvent.text.toString()
         val updateDate = binding.editTextDateUpdateEvent.text.toString()
@@ -151,28 +150,22 @@ class UpdateEventFragment : Fragment() {
                     .show()
             }
             else -> {
-                uiScope.launch {
-                    val updatedEvent = Event(
-                        args.currentEvent.eventId,
-                        updateTitle,
-                        updateImage,
-                        updateDescription,
-                        updateDate,
-                        updateLocation,
-                    )
-                    update(updatedEvent)
-                }
+                val updatedEvent = Event(
+                    args.currentEvent.eventId,
+                    updateTitle,
+                    updateImage,
+                    updateDescription,
+                    updateDate,
+                    updateLocation,
+                )
+                updateEventViewModel.updateEvent(updatedEvent)
+
 
                 Toast.makeText(requireContext(), "Event updated", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private suspend fun update(event: Event) {
-        withContext(Dispatchers.IO) {
-            database.updateEvent(event)
-        }
-    }
 
     private fun takePhotoFromCamera() {
         val galleryIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
