@@ -3,17 +3,19 @@ package com.example.happywifeapp.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.databinding.ItemEventBinding
 import com.example.happywifeapp.ui.fragments.UpcomingEventsFragmentDirections
+import com.example.happywifeapp.utils.CalculateDiffUtil
 
 class UpcomingEventsAdapter : RecyclerView.Adapter<UpcomingEventsAdapter.MyViewHolder>() {
 
-    private var data = emptyList<Event>()
+    private var upcomingEvents = emptyList<Event>()
 
     override fun getItemCount(): Int {
-        return data.size
+        return upcomingEvents.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -21,7 +23,7 @@ class UpcomingEventsAdapter : RecyclerView.Adapter<UpcomingEventsAdapter.MyViewH
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val item = data[position]
+        val item = upcomingEvents[position]
 
         holder.itemView.setOnClickListener {
             val action =
@@ -50,9 +52,12 @@ class UpcomingEventsAdapter : RecyclerView.Adapter<UpcomingEventsAdapter.MyViewH
         }
     }
 
-    fun setData(event: List<Event>) {
-        this.data = event
-        notifyDataSetChanged()
+    fun setData(newEvents: List<Event>) {
+        val eventsDiffUtil = CalculateDiffUtil(upcomingEvents, newEvents)
+        val diffUtilResult = DiffUtil.calculateDiff(eventsDiffUtil)
+        upcomingEvents = newEvents
+        diffUtilResult.dispatchUpdatesTo(this)
+
     }
 
 }

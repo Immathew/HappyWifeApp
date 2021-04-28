@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.happywifeapp.database.Event
 import com.example.happywifeapp.databinding.ItemEventBinding
 import com.example.happywifeapp.ui.fragments.AllEventsListFragmentDirections
-
+import com.example.happywifeapp.utils.CalculateDiffUtil
 
 class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
 
@@ -53,9 +54,11 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
         }
     }
 
-    fun setData(event: List<Event>) {
-        this.allEventsList = event
-        notifyDataSetChanged()
+    fun setData(newEvents: List<Event>) {
+        val eventsDiffUtil = CalculateDiffUtil(allEventsList, newEvents)
+        val diffUtilResult = DiffUtil.calculateDiff(eventsDiffUtil)
+        allEventsList = newEvents
+        diffUtilResult.dispatchUpdatesTo(this)
     }
 
     fun editAt(position: Int): NavDirections {
