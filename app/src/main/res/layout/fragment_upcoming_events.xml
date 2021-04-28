@@ -40,22 +40,22 @@
         </androidx.recyclerview.widget.RecyclerView>
 
         <FrameLayout
-            android:layout_width="118dp"
-            android:layout_height="118dp"
+            android:layout_width="98dp"
+            android:layout_height="98dp"
             android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/upcoming_event_fab_margin"
             android:layout_marginBottom="@dimen/upcoming_event_fab_margin"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_next_month_button"
-                android:layout_width="146dp"
-                android:layout_height="116dp"
-                app:elevation="0dp"
+                android:layout_width="126dp"
+                android:layout_height="96dp"
                 android:backgroundTint="@color/colorPrimary"
+                android:contentDescription="@string/see_next_month"
                 android:src="@android:color/transparent"
-                android:contentDescription="@string/see_next_month" />
+                app:elevation="0dp" />
 
             <TextView
                 android:id="@+id/text_in_fab"
@@ -63,10 +63,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:elevation="16dp"
-                android:textStyle="bold"
                 android:text="@string/see_next_month"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
