@@ -1,9 +1,6 @@
 package com.example.happywifeapp
 
 
-
-import org.junit.Assert.*
-
 /**
  * Instrumented test, which will execute on an Android device.
  *
