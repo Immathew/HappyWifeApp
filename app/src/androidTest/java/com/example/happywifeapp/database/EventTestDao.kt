@@ -142,7 +142,7 @@ class EventTestDao {
     }
 
     @Test
-    fun readAllEvents() = runBlockingTest {
+    fun readAll_deleteOneEvent() = runBlockingTest {
         // Given Event object
         val sampleEvent = Event(
             1,
@@ -179,6 +179,13 @@ class EventTestDao {
         val readAllEvents = dao.getAllEvents().getOrAwaitValue()
 
         assertThat(readAllEvents).containsExactly(sampleEvent, sampleEventTwo, sampleEventThree)
+
+        // Delete one
+        dao.deleteEvent(sampleEvent)
+
+        val readAfterDelete = dao.getAllEvents().getOrAwaitValue()
+
+        assertThat(readAfterDelete).doesNotContain(sampleEvent)
     }
 
 }
