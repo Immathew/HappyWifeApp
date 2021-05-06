@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.happywifeapp.R
 import com.example.happywifeapp.databinding.FragmentTitleBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,19 +20,19 @@ class TitleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding: FragmentTitleBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_title, container, false)
+            inflater, R.layout.fragment_title, container, false
+        )
 
-
-        binding.llAddNewEvent.setOnClickListener {view: View ->
-            Navigation.findNavController(view).navigate(R.id.action_titleFragment_to_addNewEventFragment)
+        binding.llAddNewEvent.setOnClickListener {
+            findNavController().navigate(TitleFragmentDirections.actionTitleFragmentToAddNewEventFragment())
         }
 
-        binding.llAllEvents.setOnClickListener { view: View ->
-            Navigation.findNavController(view).navigate(R.id.action_titleFragment_to_allEventsListFragment)
+        binding.llAllEvents.setOnClickListener {
+            findNavController().navigate(TitleFragmentDirections.actionTitleFragmentToAddNewEventFragment())
         }
 
-        binding.llUpcomingEvents.setOnClickListener { view: View ->
-            Navigation.findNavController(view).navigate(R.id.action_titleFragment_to_upcomingEventsFragment)
+        binding.llUpcomingEvents.setOnClickListener {
+            findNavController().navigate(TitleFragmentDirections.actionTitleFragmentToAddNewEventFragment())
         }
 
         return binding.root
