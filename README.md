@@ -14,6 +14,7 @@ Project is written in **Kotlin** with usage of:
 * ROOM 
 * Coroutines
 * Glide
+* Dexter
 
 # :mag:About the app
 
